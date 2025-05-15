@@ -35,8 +35,9 @@ jobs:
           -r -j -f Projet/reports \
           Projet/Stage1_extracted/stage-soapui-project.xml
 
-    - name: Archive test reports
-      uses: actions/upload-artifact@v3.1.2
-      with:
-        name: soapui-reports
-        path: Projet/reports
+    # - name: Archive test reports
+#   uses: actions/upload-artifact@v3.1.2
+#   with:
+#     name: soapui-reports
+#     path: Projet/reports
+
