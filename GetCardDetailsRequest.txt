@@ -1,0 +1,26 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+   <soap:Body>
+      <ns1:getCardDetails_10 xmlns:ns1="http://v1.ws.provider.acp.com/">
+         <arg0 xmlns:ns2="http://v1.ws.provider.acp.com/">
+            <KeyValues>
+               <Key>PhoneNumWallet</Key>
+               <Data>090000200</Data>
+               <Type>788</Type>
+            </KeyValues>
+            <KeyValues>
+               <Key>CountryIndicator</Key>
+               <Type>String</Type>
+            </KeyValues>
+            <RqUID>550ff9b9-262b-46f9-a5c2-8fc2e564adf3</RqUID>
+            <AddUsrIdentif>
+               <UserId>6667</UserId>
+               <RequestDate>2022-06-27T16:57:21.964657</RequestDate>
+               <UserLanguage>fr_FR</UserLanguage>
+               <FinancialInstitution>000084</FinancialInstitution>
+               <ProviderLogin>firstUser</ProviderLogin>
+               <ProviderPasswd>76dff1e87b09f0476cabe343e6fc1aaded65d2683dbdf15a6a0d2b2a92c75d29f2c82463e21fc03de6fe7cd7c72692175467284f91a46fa2b2628c184de1877c</ProviderPasswd>
+            </AddUsrIdentif>
+         </arg0>
+      </ns1:getCardDetails_10>
+   </soap:Body>
+</soap:Envelope>
