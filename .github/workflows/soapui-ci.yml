@@ -17,7 +17,7 @@ jobs:
       - name: Set up Java 11
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'  # Choix de la distribution Java (temurin fonctionne bien)
+          distribution: 'temurin'
           java-version: 11
 
       - name: Download and install SoapUI
@@ -28,12 +28,11 @@ jobs:
 
       - name: Run SOAPUI tests
         run: |
-          soapui/bin/soapui.sh.sh -s"TestSuite_&" -c"TestCase_&" -r -j -fresults -I -DskipSoapUI=true test-soapui-project.xml
+          mkdir -p results
+          soapui/bin/soapui.sh -s"TestSuite_1" -c"TestCase_1" -r -j -fresults test-soapui-project.xml
 
-      # Optionnel : sauvegarder les rapports de tests
-      #- name: Upload test results
-       # uses: actions/upload-artifact@v3
-       # with:
-         # name: soapui-results
-         # path: results
-
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: soapui-results
+          path: results
