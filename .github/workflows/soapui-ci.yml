@@ -26,9 +26,9 @@ jobs:
           unzip soapUI-light.zip -d soapui
           chmod +x soapui/soapUI-light/bin/testrunner.sh
 
-      - name: Run SOAPUI tests in headless mode
+      - name: Run SOAPUI tests
         run: |
-          soapui/soapUI-light/bin/testrunner.sh -s"TestSuite_1" -c"TestCase_1" -r -j -fresults test-soapui-project.xml
+          soapui/soapUI-light/bin/testrunner.sh -s"TestSuite_1" -c"TestCase_1" -r -j -fresults stage-soapui-project.xml
 
   
       #- name: Upload test results
