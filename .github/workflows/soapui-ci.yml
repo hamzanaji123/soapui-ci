@@ -28,7 +28,7 @@ jobs:
 
       - name: Run SOAPUI tests
         run: |
-          soapui/soapUI-light/bin/testrunner.sh -s"TestSuite_1" -c"TestCase_1" -r -j -fresults stage-soapui-project.xml
+          soapui/soapUI-light/bin/testrunner.sh -s"TestSuite_1" -c"TestCase_1" -r -j -fresults Stage-soapui-project.xml
 
   
       #- name: Upload test results
