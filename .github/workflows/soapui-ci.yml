@@ -28,11 +28,10 @@ jobs:
 
       - name: Run SOAPUI tests
         run: |
-          mkdir -p results
           soapui/bin/soapui.sh -s"TestSuite_1" -c"TestCase_1" -r -j -fresults test-soapui-project.xml
 
       - name: Upload test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: soapui-results
           path: results
