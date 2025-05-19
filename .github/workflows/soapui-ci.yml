@@ -29,7 +29,7 @@ jobs:
       - name: Run SOAPUI test - PaymentService / CreatePayment
         run: |
           mkdir -p results
-          soapui/soapUI-light/bin/testrunner.sh -s"PaymentService" -c"CreatePayment" -r -j -fresults stage-soapui-project.xml
+          soapui/soapUI-light/bin/testrunner.sh -s"PaymentService" -c"CreatePayment" -r -j -fresults Stage-soapui-project.xml
 
   
       #- name: Upload test results
