@@ -26,10 +26,10 @@ jobs:
           unzip soapUI-light.zip -d soapui
           chmod +x soapui/soapUI-light/bin/testrunner.sh
 
-      - name: Run SOAPUI test - PaymentService / CreatePayment
+      - name: Run all SOAPUI tests
         run: |
-          mkdir -p results
-          soapui/soapUI-light/bin/testrunner.sh -s"PaymentService" -c"CreatePayment" -r -j -fresults Stage-soapui-project.xml
+          soapui/soapUI-light/bin/testrunner.sh -r -j -fresults Stage-soapui-project.xml
+
 
   
       #- name: Upload test results
