@@ -2207,26 +2207,35 @@
    <soapenv:Body>\r
       <web:ListOfLanguagesByName/>\r
    </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.oorsprong.org/websamples.countryinfo/CountryInfoServiceSoapType/ListOfLanguagesByNameRequest"/></con:call></con:operation></con:interface><con:testSuite id="509a5119-035f-41e5-8fd5-065368ee806c" name="TestSuite 1"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="c24fb609-c7b5-4eee-8f24-b82e37eaef3a" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Get_Request_Run_it" searchProperties="true"><con:settings/><con:testStep type="groovy" name="Get_Request_Run_it" id="2636f62f-7866-4afa-8a96-dd76c844f1bd"><con:settings/><con:config><script>def filePath = "C:\\Users\\allo\\Desktop\\Projet\\request.txt"
-def fileTXT = new File(filePath)
-def requestBody = fileTXT.getText()
-//testStep = testRunner.testCase.getTestStepByName("SOAP Request")
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.oorsprong.org/websamples.countryinfo/CountryInfoServiceSoapType/ListOfLanguagesByNameRequest"/></con:call></con:operation></con:interface><con:testSuite id="509a5119-035f-41e5-8fd5-065368ee806c" name="TestSuite 1"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="c24fb609-c7b5-4eee-8f24-b82e37eaef3a" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Get_Request_Run_it" searchProperties="true"><con:settings/><con:testStep type="groovy" name="Get_Request_Run_it" id="2636f62f-7866-4afa-8a96-dd76c844f1bd"><con:settings/><con:config><script><![CDATA[// Requête SOAP complète en texte
+def requestBody = """<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <web:CapitalCity>
+         <web:sCountryName>France</web:sCountryName>
+      </web:CapitalCity>
+   </soapenv:Body>
+</soapenv:Envelope>"""
+
+// Cibler le TestStep SOAP
 def testStep = testRunner.testCase.getTestStepByName("SOAP Request")
 def request = testStep.testRequest
 request.setRequestContent(requestBody)
 
+// Modifier dynamiquement la valeur du champ
 def champ = "France"
 def holder = new com.eviware.soapui.support.XmlHolder(request.requestContent)
 holder.namespaces["web"] = "http://www.oorsprong.org/websamples.countryinfo"
-// Définir la valeur du champ
 holder.setNodeValue("//web:sCountryName", champ)
-// Mettre à jour le corps de la requête avec la nouvelle valeur
 request.requestContent = holder.getXml()
+
+// Lancer la requête
 testRunner.runTestStepByName("SOAP Request")
 
+// Récupérer la réponse
 def response = testRunner.testCase.testSteps["SOAP Request"].testRequest.response.getContentAsString()
-
-</script></con:config></con:testStep><con:testStep type="request" name="SOAP Request" id="7607b235-a8c4-4685-986d-ef09e8770da4"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>CountryISOCode</con:operation><con:request name="SOAP Request" id="9aae65d2-6868-40b0-a3e4-35191e2427b0"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">
+log.info "Réponse reçue :\n$response"
+]]></script></con:config></con:testStep><con:testStep type="request" name="SOAP Request" id="7607b235-a8c4-4685-986d-ef09e8770da4"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>CountryISOCode</con:operation><con:request name="SOAP Request" id="9aae65d2-6868-40b0-a3e4-35191e2427b0"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">
    <soap:Header/>
    <soap:Body>
       <web:CountryISOCode>
