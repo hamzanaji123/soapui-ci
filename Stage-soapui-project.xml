@@ -2226,14 +2226,14 @@ testRunner.runTestStepByName("SOAP Request")
 
 def response = testRunner.testCase.testSteps["SOAP Request"].testRequest.response.getContentAsString()
 
-</script></con:config></con:testStep><con:testStep type="request" name="SOAP Request" id="7607b235-a8c4-4685-986d-ef09e8770da4"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>CountryISOCode</con:operation><con:request name="SOAP Request" id="9aae65d2-6868-40b0-a3e4-35191e2427b0"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">
+</script></con:config></con:testStep><con:testStep type="request" name="SOAP Request" id="7607b235-a8c4-4685-986d-ef09e8770da4"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>CountryISOCode</con:operation><con:request name="SOAP Request" id="9aae65d2-6868-40b0-a3e4-35191e2427b0"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">
    <soap:Header/>
    <soap:Body>
       <web:CountryISOCode>
          <web:sCountryName>France</web:sCountryName>
       </web:CountryISOCode>
    </soap:Body>
-</soap:Envelope>]]></con:request><con:assertion type="SOAP Response" id="0a847649-6aea-4f06-811f-d048474c134c"/><con:assertion type="Valid HTTP Status Codes" id="fb479859-02b6-48b1-9db2-9637934bf3f3" name="Valid HTTP Status Codes"><con:configuration><codes>200,201,202
+</soap:Envelope>]]></con:request><con:assertion type="SOAP Response" id="0a847649-6aea-4f06-811f-d048474c134c"/><con:assertion type="Valid HTTP Status Codes" id="fb479859-02b6-48b1-9db2-9637934bf3f3" name="Valid HTTP Status Codes"><con:configuration><codes>200
 </codes></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="groovy" name="Get_Request_Excel_Run_it" id="30f230ea-1a54-4857-9523-ac5c1ff6eb6e"><con:settings/><con:config><script>/*
 la fonction RequestMethod sert à extraire des données spécifiques à partir d'un fichier Excel, 
 en utilisant une référence et un nom de demande comme critères de recherche. 
@@ -2652,17 +2652,17 @@ import javax.swing.JOptionPane
 import com.eviware.soapui.impl.wsdl.teststeps.*
 def response = ""
 def map = [ref: "",Validation: "", Error_Code_Resulted: "", Error_Desc_Resulted: "", Description_Result: ""]
-def file = "C:\\Users\\allo\\Desktop\\Projet\\Testing.xlsx"
-def filetxt = "C:\\Users\\allo\\Desktop\\Projet\\GetCardDetailsRequest.txt"
+def file = "C:\\Users\\PC\\Desktop\\Stage\\Projet\\Testing.xlsx"
+def filetxt = "C:\\Users\\PC\\Desktop\\Stage\\Projet\\GetCardDetailsRequest.txt"
 def Error_Desc = "Msg Description"
 //def requetBody = RequestMethod (file,"A1","Get_Card_Details")
 def requestBody = get_request_txt(filetxt)
 log.info("request"+requestBody)
-/*def testStep = testRunner.testCase.getTestStepByName("Nom de request convient avec getcard request")
+/*def testStep = testRunner.testCase.getTestStepByName("GetCardDetailsRequest")
 def request = testStep.testRequest
 request.setRequestContent(requestBody)
-testRunner.runTestStepByName("Nom de request convient avec getcard request")
-response = testRunner.testCase.testSteps["Nom de request convient avec getcard request"].testRequest.response.getContentAsString()
+testRunner.runTestStepByName("GetCardDetailsRequest")
+response = testRunner.testCase.testSteps["GetCardDetailsRequest"].testRequest.response.getContentAsString()
 def xmlHolder = new com.eviware.soapui.support.XmlHolder(response)
 xmlHolder.namespaces["ns2"] = "http://v1.ws.provider.acp.com/"
 def Error_Code = xmlHolder.getNodeValue("//return//ErrorCode")
@@ -2672,7 +2672,7 @@ def Error_Code = "00000"
 
 if(Error_Code == "00000"){
 	def continentName = "SOLDE_DISPONIBLE"
-	filetxt = "C:\\Users\\allo\\Desktop\\Projet\\GetCardDetailsResponse.txt"
+	filetxt = "C:\\Users\\PC\\Desktop\\Stage\\Projet\\GetCardDetailsResponse.txt"
 	response = get_request_txt(filetxt)
 	xml = new XmlSlurper().parseText(response)
 	//def xml = new XmlSlurper().parseText(response)
@@ -2700,11 +2700,11 @@ if(Error_Code == "00000"){
      Amount = Integer.parseInt(Amount)
 	log.info("Amount est  "+Amount)
 	/*
-	testStep = testRunner.testCase.getTestStepByName("Nom SOAP Request convient a fees request")
+	testStep = testRunner.testCase.getTestStepByName("FeesRequest")
 	request = testStep.testRequest
 	request.setRequestContent(requestBody)
-	testRunner.runTestStepByName("Nom SOAP Request convient a fees request")
-	response = testRunner.testCase.testSteps["Nom SOAP Request convient a fees request"].testRequest.response.getContentAsString()
+	testRunner.runTestStepByName("FeesRequest")
+	response = testRunner.testCase.testSteps["FeesRequest"].testRequest.response.getContentAsString()
 	xmlHolder = new com.eviware.soapui.support.XmlHolder(response)
 	xmlHolder.namespaces["ns2"] = "http://v1.ws.provider.acp.com/"
 	Error_Code = xmlHolder.getNodeValue("//return//ErrorCode")
@@ -2733,11 +2733,11 @@ if(Error_Code == "00000"){
 		requestBody = get_request_txt(filetxt)
 		//requetBody = RequestMethod (file,"A1","Operation")
 		/*
-		testStep = testRunner.testCase.getTestStepByName("Nom SOAP Request convient avec Operation request")
+		testStep = testRunner.testCase.getTestStepByName("OperationRequest")
 		request = testStep.testRequest
 		request.setRequestContent(requestBody)
-		testRunner.runTestStepByName("Nom SOAP Request convient avec Operation request")
-		response = testRunner.testCase.testSteps["Nom SOAP Request convient avec Operation request"].testRequest.response.getContentAsString()
+		testRunner.runTestStepByName("OperationRequest")
+		response = testRunner.testCase.testSteps["OperationRequest"].testRequest.response.getContentAsString()
 		xmlHolder = new com.eviware.soapui.support.XmlHolder(response)
 		xmlHolder.namespaces["ns2"] = "http://v1.ws.provider.acp.com/"
 		Error_Code = xmlHolder.getNodeValue("//return//ErrorCode")
@@ -2752,11 +2752,11 @@ if(Error_Code == "00000"){
 		filetxt = "C:\\Users\\allo\\Desktop\\Projet\\GetCardDetailsRequest.txt"
 		requestBody = get_request_txt(filetxt)
 		/*
-		testStep = testRunner.testCase.getTestStepByName("Nom de request convient avec getcard request")
+		testStep = testRunner.testCase.getTestStepByName("GetCardDetailsRequest")
 		request = testStep.testRequest
 		request.setRequestContent(requestBody)
-		testRunner.runTestStepByName("Nom de request convient avec getcard request")
-		response = testRunner.testCase.testSteps["Nom de request convient avec getcard request"].testRequest.response.getContentAsString()
+		testRunner.runTestStepByName("GetCardDetailsRequest")
+		response = testRunner.testCase.testSteps["GetCardDetailsRequest"].testRequest.response.getContentAsString()
 		xmlHolder = new com.eviware.soapui.support.XmlHolder(response)
 		xmlHolder.namespaces["ns2"] = "http://v1.ws.provider.acp.com/"
 		Error_Code = xmlHolder.getNodeValue("//return//ErrorCode")
@@ -2915,4 +2915,25 @@ def get_request_txt(filePath){
      def fileP = new File(filePath)
      def requetBody = fileP.getText()
      return requetBody
-	}]]></script></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
+	}]]></script></con:config></con:testStep><con:testStep type="request" name="GetCardDetailsRequest" id="8677d0f7-e9bb-48a8-bb10-98d4ace02fa4"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>FullCountryInfo</con:operation><con:request name="GetCardDetailsRequest" id="872803b7-05ff-4417-a013-4c0f85dbb3e6"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">\r
+   <soap:Header/>\r
+   <soap:Body>\r
+      <web:FullCountryInfo>\r
+         <web:sCountryISOCode>?</web:sCountryISOCode>\r
+      </web:FullCountryInfo>\r
+   </soap:Body>\r
+</soap:Envelope>]]></con:request><con:assertion type="SOAP Response" id="8cc07e98-0933-40ed-99cf-24db43228ce7"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="FeesRequest" id="7953b286-f3f7-4f54-8742-19de07a3f508"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>FullCountryInfo</con:operation><con:request name="FeesRequest" id="9dfd7b39-c0f1-4c2a-87a3-1b8e8e48df87"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">\r
+   <soap:Header/>\r
+   <soap:Body>\r
+      <web:FullCountryInfo>\r
+         <web:sCountryISOCode>?</web:sCountryISOCode>\r
+      </web:FullCountryInfo>\r
+   </soap:Body>\r
+</soap:Envelope>]]></con:request><con:assertion type="SOAP Response" id="c88b3003-7f9b-4a20-a9e6-595afbfe4a72"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="OperationRequest" id="077c9baa-4981-4b28-8e0a-d44b08b60bb9"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>FullCountryInfo</con:operation><con:request name="OperationRequest" id="0b8adcf2-bb44-4116-9023-bacb5747a187"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">\r
+   <soap:Header/>\r
+   <soap:Body>\r
+      <web:FullCountryInfo>\r
+         <web:sCountryISOCode>?</web:sCountryISOCode>\r
+      </web:FullCountryInfo>\r
+   </soap:Body>\r
+</soap:Envelope>]]></con:request><con:assertion type="SOAP Response" id="1b9d5fdf-841b-49c6-b151-a3c16741f529"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
