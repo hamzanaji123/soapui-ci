@@ -2207,7 +2207,7 @@
    <soapenv:Body>\r
       <web:ListOfLanguagesByName/>\r
    </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.oorsprong.org/websamples.countryinfo/CountryInfoServiceSoapType/ListOfLanguagesByNameRequest"/></con:call></con:operation></con:interface><con:testSuite id="509a5119-035f-41e5-8fd5-065368ee806c" name="TestSuite 1"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="c24fb609-c7b5-4eee-8f24-b82e37eaef3a" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Get_Request_Run_it" searchProperties="true"><con:settings/><con:testStep type="groovy" name="Get_Request_Run_it" id="2636f62f-7866-4afa-8a96-dd76c844f1bd"><con:settings/><con:config><script>def filePath = "C:\\Users\\PC\\Desktop\\request.txt"
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.oorsprong.org/websamples.countryinfo/CountryInfoServiceSoapType/ListOfLanguagesByNameRequest"/></con:call></con:operation></con:interface><con:testSuite id="509a5119-035f-41e5-8fd5-065368ee806c" name="TestSuite 1"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="c24fb609-c7b5-4eee-8f24-b82e37eaef3a" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Get_Request_Run_it" searchProperties="true"><con:settings/><con:testStep type="groovy" name="Get_Request_Run_it" id="2636f62f-7866-4afa-8a96-dd76c844f1bd"><con:settings/><con:config><script>def filePath = "C:\\Users\\allo\\Desktop\\Projet\\request.txt"
 def fileTXT = new File(filePath)
 def requestBody = fileTXT.getText()
 //testStep = testRunner.testCase.getTestStepByName("SOAP Request")
@@ -2262,7 +2262,7 @@ import com.eviware.soapui.impl.wsdl.teststeps.*
 import org.apache.poi.ss.usermodel.*
 import org.apache.poi.ss.util.CellRangeAddress
 
-file = "C:\\Users\\PC\\Desktop\\Testing.xlsx"
+file = "C:\\Users\\allo\\Desktop\\Projet\\Testing.xlsx"
 Ref = "2"
 
 //def req = "Web_Services"
@@ -2652,8 +2652,8 @@ import javax.swing.JOptionPane
 import com.eviware.soapui.impl.wsdl.teststeps.*
 def response = ""
 def map = [ref: "",Validation: "", Error_Code_Resulted: "", Error_Desc_Resulted: "", Description_Result: ""]
-def file = "C:\\Users\\PC\\Desktop\\Stage\\Projet\\Testing.xlsx"
-def filetxt = "C:\\Users\\PC\\Desktop\\Stage\\Projet\\GetCardDetailsRequest.txt"
+def file = "C:\\Users\\allo\\Desktop\\Projet\\Testing.xlsx"
+def filetxt = "C:\\Users\\allo\\Desktop\\Projet\\GetCardDetailsRequest.txt"
 def Error_Desc = "Msg Description"
 //def requetBody = RequestMethod (file,"A1","Get_Card_Details")
 def requestBody = get_request_txt(filetxt)
@@ -2672,7 +2672,7 @@ def Error_Code = "00000"
 
 if(Error_Code == "00000"){
 	def continentName = "SOLDE_DISPONIBLE"
-	filetxt = "C:\\Users\\PC\\Desktop\\Stage\\Projet\\GetCardDetailsResponse.txt"
+	filetxt = "C:\\Users\\allo\\Desktop\\Projet\\GetCardDetailsResponse.txt"
 	response = get_request_txt(filetxt)
 	xml = new XmlSlurper().parseText(response)
 	//def xml = new XmlSlurper().parseText(response)
@@ -2682,7 +2682,7 @@ if(Error_Code == "00000"){
 	solde = Integer.parseInt(code)
 	log.info("solde est  "+solde)
 	
-	//filetxt = "C:\\Users\\PC\\Desktop\\Stage\\Projet\\FeesRequest.txt"
+	//filetxt = "C:\\Users\\allo\\Desktop\\Projet\\FeesRequest.txt"
 	//requestBody = get_request_txt(filetxt)
 	requestBody = RequestMethod (file,"A1","Get_fees")
 	log.info("   "+requestBody)
@@ -2714,7 +2714,7 @@ if(Error_Code == "00000"){
 	
 	if(Error_Code == "00000"){
 		
-		filetxt = "C:\\Users\\PC\\Desktop\\Stage\\Projet\\FeesResponse.txt"
+		filetxt = "C:\\Users\\allo\\Desktop\\Projet\\FeesResponse.txt"
 		response = get_request_txt(filetxt)
 		//cn = response.stripMargin()
 		cn = response.stripMargin()
@@ -2729,7 +2729,7 @@ if(Error_Code == "00000"){
                                 .text()
           fees = Integer.parseInt(fees)              
 		log.info("fees est  "+fees)
-		filetxt = "C:\\Users\\PC\\Desktop\\Stage\\Projet\\operation.txt"
+		filetxt = "C:\\Users\\allo\\Desktop\\Projet\\operation.txt"
 		requestBody = get_request_txt(filetxt)
 		//requetBody = RequestMethod (file,"A1","Operation")
 		/*
@@ -2749,7 +2749,7 @@ if(Error_Code == "00000"){
 
 				somme = solde + (fees * Amount)
 		log.info("la somme calculé est  "+somme)
-		filetxt = "C:\\Users\\PC\\Desktop\\Stage\\Projet\\GetCardDetailsRequest.txt"
+		filetxt = "C:\\Users\\allo\\Desktop\\Projet\\GetCardDetailsRequest.txt"
 		requestBody = get_request_txt(filetxt)
 		/*
 		testStep = testRunner.testCase.getTestStepByName("Nom de request convient avec getcard request")
@@ -2767,7 +2767,7 @@ if(Error_Code == "00000"){
 		
 		if(Error_Code == "00000"){
 				//xml = new XmlSlurper().parseText(response)
-				filetxt = "C:\\Users\\PC\\Desktop\\Stage\\Projet\\GetCardDetailsResponse.txt"
+				filetxt = "C:\\Users\\allo\\Desktop\\Projet\\GetCardDetailsResponse.txt"
 				response = get_request_txt(filetxt)
 				xml = new XmlSlurper().parseText(response)
 				continent = xml.'**'.find { it.name() == 'KeyValues' && it.'**'.find { it.name() == 'Key' && it.text() == continentName } }
