@@ -2351,297 +2351,57 @@ request.requestContent = holder.getXml()
 testRunner.runTestStepByName("SOAP Request")
 
 def response = testRunner.testCase.testSteps["SOAP Request"].testRequest.response.getContentAsString()
-</script></con:config></con:testStep><con:testStep type="groovy" name="Groovy Script" id="7fe6a7ac-3985-4e70-8177-746cb1d2b2c4"><con:settings/><con:config><script><![CDATA[/*le script extrait des données spécifiques d'une réponse SOAP XML en utilisant à la fois XmlHolder pour des éléments simples et 
- * XmlSlurper pour des opérations XML plus complexes. Il démontre comment naviguer et extraire des données à partir de 
- * structures XML complexes.
-*/
-import org.apache.poi.ss.usermodel.*
+</script></con:config></con:testStep><con:testStep type="groovy" name="Groovy Script" id="7fe6a7ac-3985-4e70-8177-746cb1d2b2c4"><con:settings/><con:config><script>import com.eviware.soapui.support.XmlHolder
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import com.eviware.soapui.impl.wsdl.teststeps.*
-import com.eviware.soapui.support.UISupport
-import com.eviware.soapui.support.UISupport
-import com.eviware.soapui.impl.wsdl.testcase.WsdlTestCase
-import com.eviware.soapui.impl.wsdl.teststeps.*
-import com.eviware.soapui.impl.wsdl.*
-import java.io.File
-import com.eviware.soapui.support.XmlHolder
 import org.apache.poi.ss.usermodel.*
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import org.apache.poi.xssf.usermodel.XSSFCell
-import org.apache.poi.ss.usermodel.CellType
-import org.apache.poi.ss.usermodel.*
-import org.apache.poi.xssf.usermodel.*
-import org.apache.poi.xssf.usermodel.XSSFCell
-import org.apache.poi.ss.usermodel.CellType
-import javax.swing.JOptionPane
-import com.eviware.soapui.impl.wsdl.teststeps.*
-import org.apache.poi.ss.usermodel.*
-import org.apache.poi.ss.util.CellRangeAddress
+import java.nio.file.Paths
+import java.nio.file.Files
 
-def response = '''<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-   <soap:Body>
-      <ns2:getCardDetails_10Response xmlns:ns2="http://v1.ws.provider.acp.com/">
-         <return>
-            <RqUID>550ff9b9-262b-46f9-a5c2-8fc2e564adf3</RqUID>
-            <ResultId>ProceedWithSuccess</ResultId>
-            <ErrorCode>00000</ErrorCode>
-            <ErrorDesc>SUCCESS</ErrorDesc>
-            <Card>
-               <CardInfo>
-                  <KeyValues>
-                     <Key>PRODUCT_LIMITS_IDX</Key>
-                     <Data>002</Data>
-                     <Type>STRING</Type>
-                  </KeyValues>
-                  <KeyValues>
-                     <Key>PhoneNumWallet</Key>
-                     <Data>090000200</Data>
-                     <Type>STRING</Type>
-                  </KeyValues>
-                  <KeyValues>
-                     <Key>SOLDE_DISPONIBLE</Key>
-                     <Data>1401000</Data>
-                     <Type>STRING</Type>
-                  </KeyValues>
-                  <KeyValues>
-                     <Key>MONTANT_RETRAIT</Key>
-                     <Data>1395797</Data>
-                     <Type>STRING</Type>
-                  </KeyValues>
-                  <KeyValues>
-                     <Key>FEES_APPLIQUE</Key>
-                     <Data>5203</Data>
-                     <Type>STRING</Type>
-                  </KeyValues>
-                  <CardNumber>5431907367641648</CardNumber>
-                  <CardType>P</CardType>
-                  <EmbossedName>AKNOUK MONCEF</EmbossedName>
-                  <StatusCode>N</StatusCode>
-                  <StatusDt>2023-08-01T12:17:32+01:00</StatusDt>
-                  <ProductCode>002</ProductCode>
-                  <ProductDesc>Wallet 1000</ProductDesc>
-                  <ExpiryDt>2150-01-01T00:00:00+01:00</ExpiryDt>
-                  <Org/>
-                  <LimitIndex>001</LimitIndex>
-                  <DeliveryBranch>000001</DeliveryBranch>
-                  <NamelessCard>N</NamelessCard>
-                  <ServiceIndex>0001</ServiceIndex>
-                  <FeeCode>001</FeeCode>
-                  <PlasticCode>001</PlasticCode>
-                  <CardDeliveryDate>2022-04-12T00:00:00+01:00</CardDeliveryDate>
-                  <CardDeliveryFlag>Y</CardDeliveryFlag>
-                  <RenewedCardFlag>N</RenewedCardFlag>
-                  <CardActivationDate>2022-04-12T00:00:00+01:00</CardActivationDate>
-                  <CardActivationFlag>Y</CardActivationFlag>
-                  <StopListFlag>N</StopListFlag>
-                  <AccountBalance>
-                     <KeyValues>
-                        <Key>RIB</Key>
-                        <Data>84001000019984562979</Data>
-                        <Type>STRING</Type>
-                     </KeyValues>
-                     <KeyValues>
-                        <Key>IBAN</Key>
-                        <Data>TN5984001000019984562979</Data>
-                        <Type>STRING</Type>
-                     </KeyValues>
-                     <KeyValues>
-                        <Key>CODE_BIC</Key>
-                        <Data>BZITTNTT</Data>
-                        <Type>STRING</Type>
-                     </KeyValues>
-                     <KeyValues>
-                        <Key>DEFAULT_FLAG</Key>
-                        <Data>Y</Data>
-                        <Type>STRING</Type>
-                     </KeyValues>
-                     <KeyValues>
-                        <Key>AcctStatus</Key>
-                        <Data>N</Data>
-                        <Type>STRING</Type>
-                     </KeyValues>
-                     <KeyValues>
-                        <Key>MonthlyCapacity</Key>
-                        <Data>1000</Data>
-                        <Type>STRING</Type>
-                     </KeyValues>
-                     <KeyValues>
-                        <Key>DailyCapacity</Key>
-                        <Data>1000</Data>
-                        <Type>STRING</Type>
-                     </KeyValues>
-                     <KeyValues>
-                        <Key>DailyAuthorizedOp</Key>
-                        <Data>Illimite</Data>
-                        <Type>STRING</Type>
-                     </KeyValues>
-                     <KeyValues>
-                        <Key>MaxPerOp</Key>
-                        <Data>500</Data>
-                        <Type>STRING</Type>
-                     </KeyValues>
-                     <CmsAccountId>199845629</CmsAccountId>
-                     <AccountType>90</AccountType>
-                     <CrdAcctInfo>
-                        <CrProfileCode>002</CrProfileCode>
-                        <CreditLimit>0</CreditLimit>
-                        <CashLimit>0</CashLimit>
-                        <Loanlimit>0</Loanlimit>
-                        <PaymentModeAutoDebitInd>F</PaymentModeAutoDebitInd>
-                        <CycleCode>CEM</CycleCode>
-                        <StatementCode>S1</StatementCode>
-                     </CrdAcctInfo>
-                     <CurrentBalance>
-                        <Amt>1401000</Amt>
-                        <CurCode>788</CurCode>
-                     </CurrentBalance>
-                     <BalanceStatusDate>2022-04-12T00:00:00+01:00</BalanceStatusDate>
-                     <CurrentDebit>
-                        <Amt>0</Amt>
-                        <CurCode>788</CurCode>
-                     </CurrentDebit>
-                     <CurrentCredit>
-                        <Amt>0</Amt>
-                        <CurCode>788</CurCode>
-                     </CurrentCredit>
-                     <ClosingBalance>
-                        <Amt>0</Amt>
-                        <CurCode>788</CurCode>
-                     </ClosingBalance>
-                     <MinimumDue>
-                        <Amt>0</Amt>
-                        <CurCode>788</CurCode>
-                     </MinimumDue>
-                     <PurchaseAvailable>
-                        <Amt>1401000</Amt>
-                        <CurCode>788</CurCode>
-                     </PurchaseAvailable>
-                     <PendingBalance>
-                        <Amt>0</Amt>
-                        <CurCode>788</CurCode>
-                     </PendingBalance>
-                  </AccountBalance>
-               </CardInfo>
-               <ContractHolder>
-                  <ContractHolderId>5431907367641648</ContractHolderId>
-                  <PersonName>
-                     <LastName>MONCEF</LastName>
-                     <FirstName>AKNOUK</FirstName>
-                     <TitlePrefix>01</TitlePrefix>
-                     <LegalName>90000200</LegalName>
-                  </PersonName>
-               </ContractHolder>
-               <PersonInfo>
-                  <PersonId>00099789</PersonId>
-                  <PersonName>
-                     <LastName>MONCEF</LastName>
-                     <FirstName>AKNOUK</FirstName>
-                     <TitlePrefix>01</TitlePrefix>
-                     <LegalName>90000200</LegalName>
-                  </PersonName>
-                  <ContactInfo>
-                     <Address>
-                        <AddressId>P</AddressId>
-                        <AddrType>L1</AddrType>
-                        <CareOf>01</CareOf>
-                        <DefaultUsage>01</DefaultUsage>
-                        <Addr1>A</Addr1>
-                        <City>
-                           <Code>01002</Code>
-                           <Label>Ariana</Label>
-                        </City>
-                        <StateProv>
-                           <Code>010</Code>
-                           <Label>Ariana</Label>
-                        </StateProv>
-                        <Country>
-                           <CountryCode>788</CountryCode>
-                           <CountryName>Tunisia</CountryName>
-                        </Country>
-                        <ValidityRangeDate/>
-                     </Address>
-                     <PhoneNum>
-                        <PhoneType>0</PhoneType>
-                        <Phone>090000200</Phone>
-                     </PhoneNum>
-                     <EmailAddr>noureddine@gmail.com</EmailAddr>
-                  </ContactInfo>
-                  <TinInfo/>
-                  <Gender>M</Gender>
-                  <MaritalStatus>M</MaritalStatus>
-                  <Dependents>0</Dependents>
-                  <GovIssueIdent>
-                     <GovIssueIdentType>57</GovIssueIdentType>
-                     <IdentSerialNum>90000200</IdentSerialNum>
-                  </GovIssueIdent>
-                  <BankAcctRec>
-                     <CmsAccountId>199845629</CmsAccountId>
-                     <Bic>000084</Bic>
-                     <AccountNumber>84001000019984562979</AccountNumber>
-                     <AcctCcy>788</AcctCcy>
-                     <AcctStatus>N</AcctStatus>
-                     <AcctAutRangeDt/>
-                     <AcctBankCode>000084</AcctBankCode>
-                     <AcctBankAgency>000001</AcctBankAgency>
-                     <AcctType>00</AcctType>
-                     <AccountIndicator>P</AccountIndicator>
-                  </BankAcctRec>
-                  <OwnerCode>01</OwnerCode>
-                  <VipLevel>1</VipLevel>
-                  <CustomerSegment>001</CustomerSegment>
-                  <SocioProfCode>0001</SocioProfCode>
-                  <BranchId>000001</BranchId>
-                  <Finances>
-                     <FinanceType>I</FinanceType>
-                     <Denomination>O</Denomination>
-                     <Amt>
-                        <Amt>0</Amt>
-                        <CurCode>788</CurCode>
-                     </Amt>
-                     <Period>Y</Period>
-                  </Finances>
-                  <BirthDate>2003-06-03T00:00:00+01:00</BirthDate>
-                  <BirthCity/>
-                  <BirthState/>
-                  <BirthCountry>
-                     <CountryCode></CountryCode>
-                  </BirthCountry>
-                  <Nationality>788</Nationality>
-                  <JobTitle>01</JobTitle>
-                  <EmploymentStatus>S</EmploymentStatus>
-                  <StatusID>N</StatusID>
-                  <StatusDate>2023-06-03T13:40:26+01:00</StatusDate>
-                  <LanguageCode>FRE</LanguageCode>
-               </PersonInfo>
-            </Card>
-         </return>
-      </ns2:getCardDetails_10Response>
-   </soap:Body>
-</soap:Envelope> '''
+// Récupération de la réponse du test "Get_Request_Run_it"
+def testStepName = "Get_Request_Run_it"
+def response = context.testCase.testSteps[testStepName].testRequest.response.contentAsString
 
-def xmlHolder = new com.eviware.soapui.support.XmlHolder(response)
-xmlHolder.namespaces["ns2"] = "http://v1.ws.provider.acp.com/"
-def champ1 = xmlHolder.getNodeValue("//return//ErrorCode")
+// Parse de la réponse
+def parsedXml = new XmlSlurper().parseText(response)
+def soldeDisponible = parsedXml.'**'.find {
+    it.name() == 'Key' &amp;&amp; it.text() == 'SOLDE_DISPONIBLE'
+}?.parent()?.Data?.text()
 
-def fn = '10076'
-def champ = "SOLDE_DISPONIBLE"
-def parsedXML = new XmlSlurper().parseText(response)
-def c = parsedXML.'**'.find {it.name() == 'RqUID' }
-def d = parsedXML.'**'.find {it.name() == 'PersonInfo' }*.children()*.LastName*.text()
-def e = parsedXML.'**'.find {it.name() == 'LastName' && it.text() == 'MONCEF'}*.parent()*.PersonInfo*.text()
-def g = parsedXML.'**'.findAll { it.name() == 'Key' && it.text() == 'SOLDE_DISPONIBLE'}*.parent()*.Data*.text()
-//def c = parsedXML.'**'.findAll {it.name() == 'RqUID' }*.imdbid*.text()
-log.info(" "+g)
+def rqUID = parsedXml.'**'.find { it.name() == 'RqUID' }?.text()
+def nomClient = parsedXml.'**'.find { it.name() == 'LastName' }?.text()
+def prenomClient = parsedXml.'**'.find { it.name() == 'FirstName' }?.text()
+def cardNumber = parsedXml.'**'.find { it.name() == 'CardNumber' }?.text()
+def errorCode = parsedXml.'**'.find { it.name() == 'ErrorCode' }?.text()
 
-def cn = response.stripMargin()
-def fees = new XmlSlurper().parseText(cn)
-                           .Body
-                           .getCardDetails_10Response
-                           .return
-                           .RqUID
-                           .text()
-                         
-log.info(" "+fees)]]></script></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:testSuite id="b3bd60af-9170-4ecc-bf6e-7851fc3374a0" name="Cas_Credit"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="3f739f86-97a3-4dfa-816f-f6d5b8cc1af5" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Verification_operation_credit" searchProperties="true"><con:settings/><con:testStep type="groovy" name="GroovyScript" id="eeb4b2f4-be05-406f-ba5f-40fdc6b36f5f"><con:settings/><con:config><script><![CDATA[import com.eviware.soapui.impl.wsdl.teststeps.*
+// Création du fichier Excel
+def workbook = new XSSFWorkbook()
+def sheet = workbook.createSheet("Résultats")
+def header = ["RqUID", "Nom", "Prénom", "Card Number", "Solde Disponible", "Error Code"]
+
+// Ligne d'en-tête
+def headerRow = sheet.createRow(0)
+header.eachWithIndex { val, idx -> headerRow.createCell(idx).setCellValue(val) }
+
+// Ligne de données
+def dataRow = sheet.createRow(1)
+[dataRow.createCell(0).setCellValue(rqUID ?: ""),
+ dataRow.createCell(1).setCellValue(nomClient ?: ""),
+ dataRow.createCell(2).setCellValue(prenomClient ?: ""),
+ dataRow.createCell(3).setCellValue(cardNumber ?: ""),
+ dataRow.createCell(4).setCellValue(soldeDisponible ?: ""),
+ dataRow.createCell(5).setCellValue(errorCode ?: "")]
+
+// Dossier de sortie
+def outputDir = new File("target")
+if (!outputDir.exists()) outputDir.mkdirs()
+
+// Écriture du fichier Excel
+def excelFile = new File(outputDir, "soapui_output.xlsx")
+excelFile.withOutputStream { os -> workbook.write(os) }
+workbook.close()
+
+log.info "✅ Données exportées dans ${excelFile.absolutePath}"
+</script></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:testSuite id="b3bd60af-9170-4ecc-bf6e-7851fc3374a0" name="Cas_Credit"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="3f739f86-97a3-4dfa-816f-f6d5b8cc1af5" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Verification_operation_credit" searchProperties="true"><con:settings/><con:testStep type="groovy" name="GroovyScript" id="eeb4b2f4-be05-406f-ba5f-40fdc6b36f5f"><con:settings/><con:config><script><![CDATA[import com.eviware.soapui.impl.wsdl.teststeps.*
 import com.eviware.soapui.support.UISupport
 import com.eviware.soapui.support.UISupport
 import com.eviware.soapui.impl.wsdl.testcase.WsdlTestCase
