@@ -26,9 +26,9 @@ jobs:
           unzip soapUI-light.zip -d soapui
           chmod +x soapui/soapUI-light/bin/testrunner.sh
 
-      - name: Run all SOAPUI tests
+      - name: Run SoapUI test
         run: |
-          soapui/soapUI-light/bin/testrunner.sh -r -j -fresults Stage-soapui-project.xml
+            .\SoapUI-5.8.0\bin\testrunner.bat -s"TestSuite 1" -c"Get_Request_Run_it" -p -f"target" Stage-soapui-project.xml
 
 
   
