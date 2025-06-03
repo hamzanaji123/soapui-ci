@@ -2392,17 +2392,16 @@ def dataRow = sheet.createRow(1)
 
 // Dossier de sortie
 def outputDir = new File("C:/Users/allo/Documents/SoapUI_Outputs")
-
-
 if (!outputDir.exists()) {
-    outputDir.mkdirs() // Crée tous les répertoires parents si nécessaire
+    outputDir.mkdirs()
     log.info "Dossier de sortie créé: ${outputDir.absolutePath}"
 }
 
 // Écriture du fichier Excel
-def excelFile = new File(outputDir, "soapui_output.xlsx")
+def excelFile = new File(outputDir, "soapui_output.xlsx") // &lt;-- Première déclaration (OK)
 excelFile.withOutputStream { os -> workbook.write(os) }
 workbook.close()
+
 
 log.info "✅ Données exportées dans ${excelFile.absolutePath}"
 </script></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:testSuite id="b3bd60af-9170-4ecc-bf6e-7851fc3374a0" name="Cas_Credit"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="3f739f86-97a3-4dfa-816f-f6d5b8cc1af5" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Verification_operation_credit" searchProperties="true"><con:settings/><con:testStep type="groovy" name="GroovyScript" id="eeb4b2f4-be05-406f-ba5f-40fdc6b36f5f"><con:settings/><con:config><script><![CDATA[import com.eviware.soapui.impl.wsdl.teststeps.*
