@@ -2115,7 +2115,7 @@
          <web:sCountryISOCode>?</web:sCountryISOCode>\r
       </web:CountryIntPhoneCode>\r
    </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.oorsprong.org/websamples.countryinfo/CountryInfoServiceSoapType/CountryIntPhoneCodeRequest"/></con:call></con:operation><con:operation id="d0894492-4096-4306-8dde-e6f50a0cc4a3" isOneWay="false" action="" name="CountryISOCode" bindingOperationName="CountryISOCode" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="30e78e4e-51af-430a-9d01-2ff002dbde7d" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.oorsprong.org/websamples.countryinfo/CountryInfoServiceSoapType/CountryIntPhoneCodeRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="d0894492-4096-4306-8dde-e6f50a0cc4a3" isOneWay="false" action="" name="CountryISOCode" bindingOperationName="CountryISOCode" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="30e78e4e-51af-430a-9d01-2ff002dbde7d" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">\r
    <soapenv:Header/>\r
    <soapenv:Body>\r
       <web:CountryISOCode>\r
@@ -2136,14 +2136,14 @@
          <web:sCurrencyISOCode>?</web:sCurrencyISOCode>\r
       </web:CurrencyName>\r
    </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.oorsprong.org/websamples.countryinfo/CountryInfoServiceSoapType/CurrencyNameRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="e93f297c-4a98-4a88-be08-1b87a6290dce" isOneWay="false" action="" name="FullCountryInfo" bindingOperationName="FullCountryInfo" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="8abbf136-3585-4af3-a94f-d8b0986a23f5" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.oorsprong.org/websamples.countryinfo/CountryInfoServiceSoapType/CurrencyNameRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="e93f297c-4a98-4a88-be08-1b87a6290dce" isOneWay="false" action="" name="FullCountryInfo" bindingOperationName="FullCountryInfo" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="8abbf136-3585-4af3-a94f-d8b0986a23f5" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">\r
    <soapenv:Header/>\r
    <soapenv:Body>\r
       <web:FullCountryInfo>\r
-         <web:sCountryISOCode>?</web:sCountryISOCode>\r
+         <web:sCountryISOCode>FR</web:sCountryISOCode>\r
       </web:FullCountryInfo>\r
    </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.oorsprong.org/websamples.countryinfo/CountryInfoServiceSoapType/FullCountryInfoRequest"/></con:call></con:operation><con:operation id="b296c69b-5034-433c-ba17-7de37f0a8064" isOneWay="false" action="" name="FullCountryInfoAllCountries" bindingOperationName="FullCountryInfoAllCountries" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="32027000-82e4-464f-9c98-eef45172ba67" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.oorsprong.org/websamples.countryinfo/CountryInfoServiceSoapType/FullCountryInfoRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="b296c69b-5034-433c-ba17-7de37f0a8064" isOneWay="false" action="" name="FullCountryInfoAllCountries" bindingOperationName="FullCountryInfoAllCountries" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="32027000-82e4-464f-9c98-eef45172ba67" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">\r
    <soapenv:Header/>\r
    <soapenv:Body>\r
       <web:FullCountryInfoAllCountries/>\r
@@ -2207,13 +2207,12 @@
    <soapenv:Body>\r
       <web:ListOfLanguagesByName/>\r
    </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.oorsprong.org/websamples.countryinfo/CountryInfoServiceSoapType/ListOfLanguagesByNameRequest"/></con:call></con:operation></con:interface><con:testSuite id="509a5119-035f-41e5-8fd5-065368ee806c" name="TestSuite 1"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="c24fb609-c7b5-4eee-8f24-b82e37eaef3a" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Get_Request_Run_it" searchProperties="true"><con:settings/><con:testStep type="groovy" name="Get_Request_Run_it" id="2636f62f-7866-4afa-8a96-dd76c844f1bd"><con:settings/><con:config><script><![CDATA[// Requête SOAP complète en texte
-def requestBody = """<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.oorsprong.org/websamples.countryinfo/CountryInfoServiceSoapType/ListOfLanguagesByNameRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:testSuite id="509a5119-035f-41e5-8fd5-065368ee806c" name="TestSuite 1"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="c24fb609-c7b5-4eee-8f24-b82e37eaef3a" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Get_Request_Run_it" searchProperties="true"><con:settings/><con:testStep type="groovy" name="Get_Request_Run_it" id="2636f62f-7866-4afa-8a96-dd76c844f1bd"><con:settings/><con:config><script><![CDATA[// Requête SOAP complète pour CapitalCity (oorsprong.org)
+def requestBody = """<soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">
    <soapenv:Header/>
    <soapenv:Body>
       <web:CapitalCity>
-         <web:sCountryName>France</web:sCountryName>
-      </web:CapitalCity>
+         <web:sCountryISOCode>FR</web:sCountryISOCode> </web:CapitalCity>
    </soapenv:Body>
 </soapenv:Envelope>"""
 
@@ -2222,11 +2221,13 @@ def testStep = testRunner.testCase.getTestStepByName("SOAP Request")
 def request = testStep.testRequest
 request.setRequestContent(requestBody)
 
-// Modifier dynamiquement la valeur du champ
-def champ = "France"
+// Note : La partie XmlHolder suivante est maintenant redondante
+// si tu as déjà mis "FR" directement dans requestBody.
+// Si tu veux quand même dynamiser sCountryISOCode :
+def champ = "FR" // Ou la variable que tu veux utiliser
 def holder = new com.eviware.soapui.support.XmlHolder(request.requestContent)
 holder.namespaces["web"] = "http://www.oorsprong.org/websamples.countryinfo"
-holder.setNodeValue("//web:sCountryName", champ)
+holder.setNodeValue("//web:CapitalCity/web:sCountryISOCode", champ) // Chemin XPath correct
 request.requestContent = holder.getXml()
 
 // Lancer la requête
@@ -2234,16 +2235,14 @@ testRunner.runTestStepByName("SOAP Request")
 
 // Récupérer la réponse
 def response = testRunner.testCase.testSteps["SOAP Request"].testRequest.response.getContentAsString()
-log.info "Réponse reçue :\n$response"
-]]></script></con:config></con:testStep><con:testStep type="request" name="SOAP Request" id="7607b235-a8c4-4685-986d-ef09e8770da4"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>CountryISOCode</con:operation><con:request name="SOAP Request" id="9aae65d2-6868-40b0-a3e4-35191e2427b0"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">
-   <soap:Header/>
-   <soap:Body>
-      <web:CountryISOCode>
-         <web:sCountryName>France</web:sCountryName>
-      </web:CountryISOCode>
-   </soap:Body>
-</soap:Envelope>]]></con:request><con:assertion type="SOAP Response" id="0a847649-6aea-4f06-811f-d048474c134c"/><con:assertion type="Valid HTTP Status Codes" id="fb479859-02b6-48b1-9db2-9637934bf3f3" name="Valid HTTP Status Codes"><con:configuration><codes>200
-</codes></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="groovy" name="Get_Request_Excel_Run_it" id="30f230ea-1a54-4857-9523-ac5c1ff6eb6e"><con:settings/><con:config><script>/*
+log.info "Réponse reçue :\n$response"]]></script></con:config></con:testStep><con:testStep type="request" name="SOAP Request" id="7607b235-a8c4-4685-986d-ef09e8770da4"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>CountryISOCode</con:operation><con:request name="SOAP Request" id="9aae65d2-6868-40b0-a3e4-35191e2427b0"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <web:CapitalCity>
+         <web:sCountryISOCode>FR</web:sCountryISOCode> </web:CapitalCity>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="b57e772b-ca7c-443c-8986-e4c04669ab7f" name="SOAP Response"/><con:assertion type="Valid HTTP Status Codes" id="519bf66b-0936-4518-b045-48e8994ae889" name="Valid HTTP Status Codes"><con:configuration><codes>200</codes></con:configuration></con:assertion><con:assertion type="XPath Match" id="b81329eb-89b7-45fb-a029-a247078e3245" name="XPath Match"><con:configuration><path>declare namespace m='http://www.oorsprong.org/websamples.countryinfo';
+//m:CapitalCityResponse/m:CapitalCityResult</path><content>Paris</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="groovy" name="Get_Request_Excel_Run_it" id="30f230ea-1a54-4857-9523-ac5c1ff6eb6e"><con:settings/><con:config><script>/*
 la fonction RequestMethod sert à extraire des données spécifiques à partir d'un fichier Excel, 
 en utilisant une référence et un nom de demande comme critères de recherche. 
 Elle tient compte des régions fusionnées et renvoie la valeur correspondante lorsque la correspondance est trouvée.
@@ -2358,7 +2357,7 @@ import java.nio.file.Paths
 import java.nio.file.Files
 
 // Récupération de la réponse du test "Get_Request_Run_it"
-def testStepName = "Get_Request_Run_it"
+def testStepName = "SOAP Request"
 def response = context.testCase.testSteps[testStepName].testRequest.response.contentAsString
 
 // Parse de la réponse
@@ -2392,8 +2391,13 @@ def dataRow = sheet.createRow(1)
  dataRow.createCell(5).setCellValue(errorCode ?: "")]
 
 // Dossier de sortie
-def outputDir = new File("target")
-if (!outputDir.exists()) outputDir.mkdirs()
+def outputDir = new File("C:/Users/allo/Documents/SoapUI_Outputs")
+
+
+if (!outputDir.exists()) {
+    outputDir.mkdirs() // Crée tous les répertoires parents si nécessaire
+    log.info "Dossier de sortie créé: ${outputDir.absolutePath}"
+}
 
 // Écriture du fichier Excel
 def excelFile = new File(outputDir, "soapui_output.xlsx")
@@ -2691,18 +2695,21 @@ def get_request_txt(filePath){
          <web:sCountryISOCode>?</web:sCountryISOCode>\r
       </web:FullCountryInfo>\r
    </soap:Body>\r
-</soap:Envelope>]]></con:request><con:assertion type="SOAP Response" id="8cc07e98-0933-40ed-99cf-24db43228ce7"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="FeesRequest" id="7953b286-f3f7-4f54-8742-19de07a3f508"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>FullCountryInfo</con:operation><con:request name="FeesRequest" id="9dfd7b39-c0f1-4c2a-87a3-1b8e8e48df87"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">\r
+</soap:Envelope>]]></con:request><con:assertion type="SOAP Response" id="8cc07e98-0933-40ed-99cf-24db43228ce7"/><con:assertion type="Valid HTTP Status Codes" id="f187f59d-15a7-4b1d-9ba5-ff284e92ce21" name="Valid HTTP Status Codes"><con:configuration><codes>200</codes></con:configuration></con:assertion><con:assertion type="XPath Match" id="b82aa609-715a-4360-aab6-40410a577b5f" name="XPath Match"><con:configuration><path>declare namespace m='http://www.oorsprong.org/websamples.countryinfo';
+//m:FullCountryInfoResult/m:sName[text() = 'Country not found in the database']</path><content>Country not found in the database</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="FeesRequest" id="7953b286-f3f7-4f54-8742-19de07a3f508"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>FullCountryInfo</con:operation><con:request name="FeesRequest" id="9dfd7b39-c0f1-4c2a-87a3-1b8e8e48df87"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">\r
    <soap:Header/>\r
    <soap:Body>\r
       <web:FullCountryInfo>\r
-         <web:sCountryISOCode>?</web:sCountryISOCode>\r
+         <web:sCountryISOCode>FR</web:sCountryISOCode>\r
       </web:FullCountryInfo>\r
    </soap:Body>\r
-</soap:Envelope>]]></con:request><con:assertion type="SOAP Response" id="c88b3003-7f9b-4a20-a9e6-595afbfe4a72"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="OperationRequest" id="077c9baa-4981-4b28-8e0a-d44b08b60bb9"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>FullCountryInfo</con:operation><con:request name="OperationRequest" id="0b8adcf2-bb44-4116-9023-bacb5747a187"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">\r
+</soap:Envelope>]]></con:request><con:assertion type="SOAP Response" id="c88b3003-7f9b-4a20-a9e6-595afbfe4a72"/><con:assertion type="Valid HTTP Status Codes" id="b60869b7-8c6c-4ef5-a921-eb91a582ac60" name="Valid HTTP Status Codes"><con:configuration><codes>200</codes></con:configuration></con:assertion><con:assertion type="XPath Match" id="d0e3d532-47d9-4dd4-96b5-979a608b3965" name="XPath Match"><con:configuration><path>declare namespace m="http://www.oorsprong.org/websamples.countryinfo"; 
+//m:FullCountryInfoResult/m:sName</path><content>France</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="OperationRequest" id="077c9baa-4981-4b28-8e0a-d44b08b60bb9"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>FullCountryInfo</con:operation><con:request name="OperationRequest" id="0b8adcf2-bb44-4116-9023-bacb5747a187"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">\r
    <soap:Header/>\r
    <soap:Body>\r
       <web:FullCountryInfo>\r
-         <web:sCountryISOCode>?</web:sCountryISOCode>\r
+         <web:sCountryISOCode>FR</web:sCountryISOCode>\r
       </web:FullCountryInfo>\r
    </soap:Body>\r
-</soap:Envelope>]]></con:request><con:assertion type="SOAP Response" id="1b9d5fdf-841b-49c6-b151-a3c16741f529"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
+</soap:Envelope>]]></con:request><con:assertion type="SOAP Response" id="1b9d5fdf-841b-49c6-b151-a3c16741f529"/><con:assertion type="Valid HTTP Status Codes" id="a5d60047-071d-4c83-94f8-34de963de928" name="Valid HTTP Status Codes"><con:configuration><codes>200</codes></con:configuration></con:assertion><con:assertion type="XPath Match" id="dc6df76f-a34b-448b-afa4-2b74fdccaebb" name="XPath Match"><con:configuration><path>declare namespace m="http://www.oorsprong.org/websamples.countryinfo"; 
+//m:FullCountryInfoResult/m:sCapitalCity</path><content>Paris</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
