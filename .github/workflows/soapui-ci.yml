@@ -23,7 +23,7 @@ jobs:
       - name: Download and install SoapUI (Full Version)
         id: install_soapui # Garde cet ID
         run: |
-            SOAPUI_VERSION="5.7.0" # Utilise la version que tu souhaites, vérifie la sur smartbear.com
+            SOAPUI_VERSION="5.8.0" # Utilise la version que tu souhaites, vérifie la sur smartbear.com
             SOAPUI_INSTALL_DIR="/opt/SoapUI" # Répertoire d'installation standard
   
             echo "Téléchargement de SoapUI ${SOAPUI_VERSION}..."
