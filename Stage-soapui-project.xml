@@ -2235,13 +2235,14 @@ testRunner.runTestStepByName("SOAP Request")
 
 // Récupérer la réponse
 def response = testRunner.testCase.testSteps["SOAP Request"].testRequest.response.getContentAsString()
-log.info "Réponse reçue :\n$response"]]></script></con:config></con:testStep><con:testStep type="request" name="SOAP Request" id="7607b235-a8c4-4685-986d-ef09e8770da4"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>CountryISOCode</con:operation><con:request name="SOAP Request" id="9aae65d2-6868-40b0-a3e4-35191e2427b0"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">
-   <soapenv:Header/>
-   <soapenv:Body>
-      <web:CapitalCity>
-         <web:sCountryISOCode>FR</web:sCountryISOCode> </web:CapitalCity>
-   </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="b57e772b-ca7c-443c-8986-e4c04669ab7f" name="SOAP Response"/><con:assertion type="Valid HTTP Status Codes" id="519bf66b-0936-4518-b045-48e8994ae889" name="Valid HTTP Status Codes"><con:configuration><codes>200</codes></con:configuration></con:assertion><con:assertion type="XPath Match" id="b81329eb-89b7-45fb-a029-a247078e3245" name="XPath Match"><con:configuration><path>declare namespace m='http://www.oorsprong.org/websamples.countryinfo';
+log.info "Réponse reçue :\n$response"]]></script></con:config></con:testStep><con:testStep type="request" name="SOAP Request" id="7607b235-a8c4-4685-986d-ef09e8770da4"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>CountryISOCode</con:operation><con:request name="SOAP Request" id="9aae65d2-6868-40b0-a3e4-35191e2427b0"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">
+   <soap:Header/>
+   <soap:Body>
+       <web:CapitalCity>
+         <web:sCountryISOCode>FR</web:sCountryISOCode>
+       </web:CapitalCity>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:assertion type="SOAP Response" id="b57e772b-ca7c-443c-8986-e4c04669ab7f" name="SOAP Response"/><con:assertion type="Valid HTTP Status Codes" id="519bf66b-0936-4518-b045-48e8994ae889" name="Valid HTTP Status Codes"><con:configuration><codes>200</codes></con:configuration></con:assertion><con:assertion type="XPath Match" id="b81329eb-89b7-45fb-a029-a247078e3245" name="XPath Match"><con:configuration><path>declare namespace m='http://www.oorsprong.org/websamples.countryinfo';
 //m:CapitalCityResponse/m:CapitalCityResult</path><content>Paris</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="groovy" name="Get_Request_Excel_Run_it" id="30f230ea-1a54-4857-9523-ac5c1ff6eb6e"><con:settings/><con:config><script>/*
 la fonction RequestMethod sert à extraire des données spécifiques à partir d'un fichier Excel, 
 en utilisant une référence et un nom de demande comme critères de recherche. 
@@ -2270,7 +2271,7 @@ import com.eviware.soapui.impl.wsdl.teststeps.*
 import org.apache.poi.ss.usermodel.*
 import org.apache.poi.ss.util.CellRangeAddress
 
-file = "C:\\Users\\allo\\Desktop\\Projet\\Testing.xlsx"
+file = "Testing.xlsx"
 Ref = "2"
 
 //def req = "Web_Services"
@@ -2340,11 +2341,11 @@ def testStep = testRunner.testCase.getTestStepByName("SOAP Request")
 def request = testStep.testRequest
 request.setRequestContent(requestBody)
 
-def champ = "France"
+def champ = "FR"
 def holder = new com.eviware.soapui.support.XmlHolder(request.requestContent)
 holder.namespaces["web"] = "http://www.oorsprong.org/websamples.countryinfo"
 // Définir la valeur du champ
-holder.setNodeValue("//web:sCountryName", champ)
+holder.setNodeValue("//web:sCountryISOCode", champ) 
 // Mettre à jour le corps de la requête avec la nouvelle valeur
 request.requestContent = holder.getXml()
 testRunner.runTestStepByName("SOAP Request")
@@ -2424,8 +2425,8 @@ import javax.swing.JOptionPane
 import com.eviware.soapui.impl.wsdl.teststeps.*
 def response = ""
 def map = [ref: "",Validation: "", Error_Code_Resulted: "", Error_Desc_Resulted: "", Description_Result: ""]
-def file = "C:\\Users\\PC\\Desktop\\Stage\\Projet\\Testing.xlsx"
-def filetxt = "C:\\Users\\PC\\Desktop\\Stage\\Projet\\GetCardDetailsRequest.txt"
+def file = "C:\\Users\\allo\\Desktop\\Projet\\Testing.xlsx"
+def filetxt = "C:\\Users\\allo\\Desktop\\Projet\\GetCardDetailsRequest.txt"
 def Error_Desc = "Msg Description"
 //def requetBody = RequestMethod (file,"A1","Get_Card_Details")
 def requestBody = get_request_txt(filetxt)
@@ -2444,7 +2445,7 @@ def Error_Code = "00000"
 
 if(Error_Code == "00000"){
 	def continentName = "SOLDE_DISPONIBLE"
-	filetxt = "C:\\Users\\PC\\Desktop\\Stage\\Projet\\GetCardDetailsResponse.txt"
+	filetxt = "C:\\Users\\allo\\Desktop\\Projet\\GetCardDetailsResponse.txt"
 	response = get_request_txt(filetxt)
 	xml = new XmlSlurper().parseText(response)
 	//def xml = new XmlSlurper().parseText(response)
