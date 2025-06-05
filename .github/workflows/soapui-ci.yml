@@ -29,9 +29,9 @@ jobs:
           
           # Correction du chemin ici : une seule instance de 'soapUI-light'
           echo "Rendre testrunner.sh exécutable..."
-          chmod +x soapui/soapUI-light/bin/testrunner.sh
+          chmod +x soapui/soapUI-light/soapUI-light/bin/testrunner.sh
           
-          echo "::set-output name=testrunner_path::$(pwd)/soapui/soapUI-light/bin/testrunner.sh"
+          echo "::set-output name=testrunner_path::$(pwd)/soapui/soapUI-light/soapUI-light/bin/testrunner.sh"
 
       - name: Create output directory
         run: mkdir -p target # Crée le dossier 'target' à la racine du dépôt
