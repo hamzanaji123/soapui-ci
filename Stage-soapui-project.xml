@@ -2235,123 +2235,275 @@ testRunner.runTestStepByName("SOAP Request")
 
 // Récupérer la réponse
 def response = testRunner.testCase.testSteps["SOAP Request"].testRequest.response.getContentAsString()
-log.info "Réponse reçue :\n$response"]]></script></con:config></con:testStep><con:testStep type="request" name="SOAP Request" id="7607b235-a8c4-4685-986d-ef09e8770da4"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>CountryISOCode</con:operation><con:request name="SOAP Request" id="9aae65d2-6868-40b0-a3e4-35191e2427b0"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">
-   <soap:Header/>
-   <soap:Body>
-       <web:CapitalCity>
-         <web:sCountryISOCode>FR</web:sCountryISOCode>
-       </web:CapitalCity>
-   </soap:Body>
-</soap:Envelope>]]></con:request><con:assertion type="SOAP Response" id="b57e772b-ca7c-443c-8986-e4c04669ab7f" name="SOAP Response"/><con:assertion type="Valid HTTP Status Codes" id="519bf66b-0936-4518-b045-48e8994ae889" name="Valid HTTP Status Codes"><con:configuration><codes>200</codes></con:configuration></con:assertion><con:assertion type="XPath Match" id="b81329eb-89b7-45fb-a029-a247078e3245" name="XPath Match"><con:configuration><path>declare namespace m='http://www.oorsprong.org/websamples.countryinfo';
-//m:CapitalCityResponse/m:CapitalCityResult</path><content>Paris</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="groovy" name="Get_Request_Excel_Run_it" id="30f230ea-1a54-4857-9523-ac5c1ff6eb6e"><con:settings/><con:config><script>/*
-la fonction RequestMethod sert à extraire des données spécifiques à partir d'un fichier Excel, 
-en utilisant une référence et un nom de demande comme critères de recherche. 
+log.info "Réponse reçue :\n$response"]]></script></con:config></con:testStep><con:testStep type="request" name="SOAP Request" id="7607b235-a8c4-4685-986d-ef09e8770da4"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>CountryISOCode</con:operation><con:request name="SOAP Request" id="9aae65d2-6868-40b0-a3e4-35191e2427b0"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <web:CapitalCity>
+         <web:sCountryISOCode>FR</web:sCountryISOCode> </web:CapitalCity>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="b57e772b-ca7c-443c-8986-e4c04669ab7f" name="SOAP Response"/><con:assertion type="Valid HTTP Status Codes" id="519bf66b-0936-4518-b045-48e8994ae889" name="Valid HTTP Status Codes"><con:configuration><codes>200</codes></con:configuration></con:assertion><con:assertion type="XPath Match" id="b81329eb-89b7-45fb-a029-a247078e3245" name="XPath Match"><con:configuration><path>declare namespace m='http://www.oorsprong.org/websamples.countryinfo';
+//m:CapitalCityResponse/m:CapitalCityResult</path><content>Paris</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="groovy" name="Get_Request_Excel_Run_it" id="30f230ea-1a54-4857-9523-ac5c1ff6eb6e"><con:settings/><con:config><script><![CDATA[/*
+la fonction RequestMethod sert à extraire des données spécifiques à partir d'un fichier Excel,
+en utilisant une référence et un nom de demande comme critères de recherche.
 Elle tient compte des régions fusionnées et renvoie la valeur correspondante lorsque la correspondance est trouvée.
 */
+
+// Importations des classes Apache POI et SoapUI
 import org.apache.poi.ss.usermodel.*
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import com.eviware.soapui.impl.wsdl.teststeps.*
-import com.eviware.soapui.support.UISupport
-import com.eviware.soapui.support.UISupport
-import com.eviware.soapui.impl.wsdl.testcase.WsdlTestCase
-import com.eviware.soapui.impl.wsdl.teststeps.*
-import com.eviware.soapui.impl.wsdl.*
-import java.io.File
-import com.eviware.soapui.support.XmlHolder
-import org.apache.poi.ss.usermodel.*
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFCell
-import org.apache.poi.ss.usermodel.CellType
-import org.apache.poi.ss.usermodel.*
-import org.apache.poi.xssf.usermodel.*
-import org.apache.poi.xssf.usermodel.XSSFCell
-import org.apache.poi.ss.usermodel.CellType
-import javax.swing.JOptionPane
-import com.eviware.soapui.impl.wsdl.teststeps.*
-import org.apache.poi.ss.usermodel.*
 import org.apache.poi.ss.util.CellRangeAddress
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException // Ajouté pour une meilleure gestion des erreurs de fichier
 
+import com.eviware.soapui.impl.wsdl.teststeps.WsdlTestStep
+import com.eviware.soapui.impl.wsdl.testcase.WsdlTestCase
+import com.eviware.soapui.impl.wsdl.WsdlProject
+import com.eviware.soapui.support.UISupport
+import com.eviware.soapui.support.XmlHolder
+
+// Définition du chemin du fichier Excel
+// ATTENTION : C'est ici que tu dois faire la modification CRUCIALE
+// 'file' est une variable globale ici, et sera utilisée par RequestMethod.
+// Comme Testing.xlsx est à la racine de ton dépôt, ce chemin relatif est le bon.
 file = "Testing.xlsx"
-Ref = "2"
 
-//def req = "Web_Services"
+// Ces variables globales sont utilisées pour l'appel final de RequestMethod
+Ref = "2" // Assure-toi que cette référence correspond à une valeur dans ta colonne A de l'Excel
+RequestName="Get_Country_Code" // Assure-toi que ce nom correspond à une valeur dans ta ligne d'en-tête de l'Excel
+
+// ---------- FONCTION PRINCIPALE DE LECTURE EXCEL ----------
 def RequestMethod (filePath,Ref,RequestName){
-	def req = "Web_Services"
-	def index = 0
-	//def filePath = "C:\\Users\\PC\\Desktop\\project\\xx.xlsx"
-	// Chargement du fichier Excel
-	File file = new File(filePath)
-	FileInputStream fis = new FileInputStream(file)
-	XSSFWorkbook workbook = new XSSFWorkbook(fis)
+    log.info "DBG: Début de l'exécution de RequestMethod." // Log de débogage
+    log.info "DBG: Chemin du fichier Excel fourni: ${filePath}" // Log de débogage
 
-	// Sélection de la feuille que vous voulez lire (ici, nous lisons la première feuille)
-	XSSFSheet sheet = workbook.getSheetAt(1)
-	
-	def mergedRegions = sheet.getMergedRegions()
-	log.info(""+mergedRegions.isEmpty())
-	Row row = sheet.getRow(0)
-	index = fonction(row,req)
-	
-	
-	for (int i = 1; i &lt; sheet.getPhysicalNumberOfRows(); i++) {
-		//log.info (+i)
-     	row = sheet.getRow(i)
-		cell = row.getCell(0)
-		if (cell.getStringCellValue().toString() == Ref){
-			if (! mergedRegions.isEmpty() ){
-				for (region in mergedRegions) {
-    					if (region.containsRow(i)) {
-    						for(r in region.firstRow .. region.getLastRow() ){
-    							if(sheet.getRow(r).getCell(index).getStringCellValue() == RequestName ){
-    								def val = sheet.getRow(r).getCell(index + 1).getStringCellValue()
-    								//log.info("la valeur  "+val)
-    								log.info("SUCCES")
-    								return val
-    							}
-    						}
-    					}
-				}
-				
-			}
-			if(row.getCell(index).getStringCellValue() == RequestName){
-    				def val = row.getCell(index+1).getStringCellValue()
-    				//log.info("la valeur  "+val)
-    				log.info("SUCCES if ")
-    				return val
-			}
-		}
-	}
+    def req = "Web_Services" // Variable interne à la fonction
+    def index = 0
+
+    // Vérifie l'existence et l'accessibilité du fichier Excel
+    File excelFile = new File(filePath)
+    if (!excelFile.exists()) {
+        log.error "DBG: ERREUR CRITIQUE - Le fichier Excel n'a PAS été trouvé à l'emplacement: ${filePath}"
+        UISupport.showErrorMessage("Le fichier Excel n'a pas été trouvé à: ${filePath}") // Affiche une erreur dans SoapUI (pas sur GHA)
+        throw new FileNotFoundException("Le fichier Excel n'a pas été trouvé à: ${filePath}") // Propage l'exception pour arrêter le script
+    } else {
+        log.info "DBG: Le fichier Excel a été trouvé à: ${filePath}"
+    }
+
+    FileInputStream fis
+    XSSFWorkbook workbook
+    try {
+        fis = new FileInputStream(excelFile)
+        workbook = new XSSFWorkbook(fis)
+        log.info "DBG: Fichier Excel chargé avec succès."
+    } catch (Exception e) {
+        log.error "DBG: ERREUR lors du chargement du classeur Excel: " + e.getMessage()
+        UISupport.showErrorMessage("Erreur lors du chargement du classeur Excel: " + e.getMessage())
+        throw e // Propage l'exception
+    }
+
+    // Sélection de la feuille que vous voulez lire (ici, la deuxième feuille, index 1)
+    // Assurez-vous que votre feuille "Credit" est bien à l'index 1 (la 2ème feuille).
+    // Si c'est la première feuille, utilisez getSheetAt(0).
+    XSSFSheet sheet = workbook.getSheetAt(1)
+    log.info "DBG: Accès à la feuille d'index 1 (deuxième feuille) réussi."
+
+    def mergedRegions = sheet.getMergedRegions()
+    log.info("DBG: La feuille contient des régions fusionnées : " + !mergedRegions.isEmpty())
+
+    Row headerRow = sheet.getRow(0) // Première ligne pour les en-têtes
+    if (headerRow == null) {
+        log.error "DBG: ERREUR - La première ligne de la feuille est vide. Impossible de trouver les en-têtes."
+        throw new RuntimeException("La première ligne de la feuille Excel est vide.")
+    }
+
+    index = fonction(headerRow, req) // Trouve l'index de la colonne "Web_Services"
+    if (index == -1) { // Modifier la fonction 'fonction' pour renvoyer -1 si non trouvé
+        log.error "DBG: ERREUR - La colonne 'Web_Services' n'a pas été trouvée dans la première ligne."
+        throw new RuntimeException("La colonne 'Web_Services' n'a pas été trouvée dans l'Excel.")
+    }
+    log.info "DBG: Index de la colonne 'Web_Services' trouvé: ${index}"
+
+    for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
+        row = sheet.getRow(i)
+        if (row == null) {
+            log.warn "DBG: Ligne ${i} est null, sautée."
+            continue
+        }
+
+        Cell cellRef = row.getCell(0)
+        if (cellRef == null) {
+            log.warn "DBG: Cellule de référence (colonne 0) à la ligne ${i} est null, sautée."
+            continue
+        }
+
+        // Gérer différents types de cellules pour la référence (si Ref peut être numérique)
+        def cellRefValue
+        if (cellRef.getCellType() == CellType.STRING) {
+            cellRefValue = cellRef.getStringCellValue().trim()
+        } else if (cellRef.getCellType() == CellType.NUMERIC) {
+            cellRefValue = String.valueOf(cellRef.getNumericCellValue()).trim()
+        } else {
+            log.warn "DBG: Type de cellule inattendu pour la référence à la ligne ${i}: ${cellRef.getCellType()}"
+            continue
+        }
+
+        if (cellRefValue == Ref) { // Comparaison avec la référence (ex: "2")
+            log.info "DBG: Référence '${Ref}' trouvée à la ligne ${i}."
+
+            if (!mergedRegions.isEmpty()) {
+                for (region in mergedRegions) {
+                    if (region.containsRow(i)) {
+                        for (r in region.firstRow..region.getLastRow()) {
+                            Row currentRow = sheet.getRow(r)
+                            if (currentRow == null) continue
+                            Cell requestNameCell = currentRow.getCell(index)
+                            if (requestNameCell == null) continue
+
+                            def requestNameCellValue = ""
+                            if (requestNameCell.getCellType() == CellType.STRING) {
+                                requestNameCellValue = requestNameCell.getStringCellValue().trim()
+                            } else if (requestNameCell.getCellType() == CellType.NUMERIC) {
+                                requestNameCellValue = String.valueOf(requestNameCell.getNumericCellValue()).trim()
+                            }
+
+                            if (requestNameCellValue == RequestName) {
+                                Cell valueCell = currentRow.getCell(index + 1)
+                                if (valueCell == null) {
+                                    log.warn "DBG: Cellule de valeur à (${r}, ${index + 1}) est null pour RequestName '${RequestName}'."
+                                    continue
+                                }
+                                def val = ""
+                                if (valueCell.getCellType() == CellType.STRING) {
+                                    val = valueCell.getStringCellValue()
+                                } else if (valueCell.getCellType() == CellType.NUMERIC) {
+                                    val = String.valueOf(valueCell.getNumericCellValue())
+                                } else {
+                                    log.warn "DBG: Type de cellule inattendu pour la valeur à (${r}, ${index + 1}): ${valueCell.getCellType()}"
+                                    continue
+                                }
+                                log.info("DBG: SUCCES - Valeur trouvée dans région fusionnée: ${val}")
+                                fis.close() // Ferme le FileInputStream
+                                workbook.close() // Ferme le classeur
+                                return val
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Vérifier aussi en dehors des régions fusionnées si la correspondance est directe
+            Cell requestNameCell = row.getCell(index)
+            if (requestNameCell != null) {
+                def requestNameCellValue = ""
+                if (requestNameCell.getCellType() == CellType.STRING) {
+                    requestNameCellValue = requestNameCell.getStringCellValue().trim()
+                } else if (requestNameCell.getCellType() == CellType.NUMERIC) {
+                    requestNameCellValue = String.valueOf(requestNameCell.getNumericCellValue()).trim()
+                }
+
+                if (requestNameCellValue == RequestName) {
+                    Cell valueCell = row.getCell(index + 1)
+                    if (valueCell == null) {
+                        log.warn "DBG: Cellule de valeur à (${i}, ${index + 1}) est null pour RequestName '${RequestName}'."
+                        continue
+                    }
+                    def val = ""
+                    if (valueCell.getCellType() == CellType.STRING) {
+                        val = valueCell.getStringCellValue()
+                    } else if (valueCell.getCellType() == CellType.NUMERIC) {
+                        val = String.valueOf(valueCell.getNumericCellValue())
+                    } else {
+                        log.warn "DBG: Type de cellule inattendu pour la valeur à (${i}, ${index + 1}): ${valueCell.getCellType()}"
+                        continue
+                    }
+                    log.info("DBG: SUCCES - Valeur trouvée directement: ${val}")
+                    fis.close() // Ferme le FileInputStream
+                    workbook.close() // Ferme le classeur
+                    return val
+                }
+            }
+        }
+    }
+    log.warn "DBG: Aucune valeur trouvée pour la référence '${Ref}' et la demande '${RequestName}'."
+    fis.close() // Ferme le FileInputStream
+    workbook.close() // Ferme le classeur
+    return null // Retourne null si aucune correspondance n'est trouvée
 }
 
-def fonction(row,RequestName){
-	for (int j = 0; j &lt; row.getPhysicalNumberOfCells(); j++) {
-		Cell cell = row.getCell(j)
-		if (cell.getStringCellValue() == RequestName){
-			def indexc = cell.columnIndex
-			//log.info("index"+indexc)
-			return indexc
-			}
-	}
-	}
-RequestName="Get_Country_Code"
-ref="A2"
-def requestBody = RequestMethod (file,ref,RequestName)
+// ---------- FONCTION POUR TROUVER L'INDEX DE LA COLONNE ----------
+def fonction(row, RequestName){
+    log.info "DBG: Début de la fonction 'fonction' pour trouver l'index de la colonne."
+    if (row == null) {
+        log.error "DBG: ERREUR - La ligne d'en-tête est null dans la fonction 'fonction'."
+        return -1 // Indique que la ligne est vide ou non valide
+    }
+    for (int j = 0; j < row.getPhysicalNumberOfCells(); j++) {
+        Cell cell = row.getCell(j)
+        if (cell != null && cell.getCellType() == CellType.STRING && cell.getStringCellValue() == RequestName){
+            def indexc = cell.columnIndex
+            log.info("DBG: Index de la colonne '${RequestName}' trouvé: ${indexc}")
+            return indexc
+        }
+    }
+    log.warn "DBG: La colonne '${RequestName}' n'a pas été trouvée dans la ligne d'en-tête."
+    return -1 // Retourne -1 si la colonne n'est pas trouvée
+}
+
+
+// ---------- APPEL ET EXÉCUTION DES REQUÊTES ----------
+// Ces variables globales sont déjà définies en haut, mais on les réutilise ici.
+// RequestName="Get_Country_Code"
+// ref="A2" // Attention, ta variable globale est 'Ref="2"', pas 'ref="A2"'. Utilise 'Ref'.
+// Utilise la variable globale 'Ref'
+def requestBody = RequestMethod (file, Ref, RequestName)
+
+if (requestBody == null) {
+    log.error "DBG: ERREUR - Le corps de la requête est null. Vérifiez le fichier Excel et les critères de recherche."
+    UISupport.showErrorMessage("Le corps de la requête est null. Vérifiez le fichier Excel et les critères de recherche.")
+    testRunner.fail("Le corps de la requête est null. Le TestCase échoue.") // Fait échouer le TestCase explicitement
+    return // Arrête le script si le corps est null
+}
+log.info "DBG: Corps de la requête récupéré: ${requestBody}"
 
 def testStep = testRunner.testCase.getTestStepByName("SOAP Request")
+if (testStep == null) {
+    log.error "DBG: ERREUR - L'étape 'SOAP Request' n'a pas été trouvée."
+    UISupport.showErrorMessage("L'étape 'SOAP Request' n'a pas été trouvée.")
+    testRunner.fail("L'étape 'SOAP Request' n'a pas été trouvée. Le TestCase échoue.")
+    return
+}
 def request = testStep.testRequest
 request.setRequestContent(requestBody)
+log.info "DBG: Corps de la requête SOAP défini."
 
-def champ = "FR"
+def champ = "FR" // Cette valeur "FR" semble être codée en dur. Est-ce intentionnel ?
 def holder = new com.eviware.soapui.support.XmlHolder(request.requestContent)
 holder.namespaces["web"] = "http://www.oorsprong.org/websamples.countryinfo"
 // Définir la valeur du champ
-holder.setNodeValue("//web:sCountryISOCode", champ) 
+holder.setNodeValue("//web:sCountryISOCode", champ)
 // Mettre à jour le corps de la requête avec la nouvelle valeur
 request.requestContent = holder.getXml()
-testRunner.runTestStepByName("SOAP Request")
+log.info "DBG: Champ 'sCountryISOCode' mis à jour avec la valeur: ${champ}. Requête finale: ${request.requestContent}"
 
+// Exécute la requête SOAP
+log.info "DBG: Exécution de l'étape 'SOAP Request'..."
+def result = testRunner.runTestStepByName("SOAP Request")
+if (result.getStatus() == com.eviware.soapui.model.testsuite.TestStepResult.TestStepStatus.FAILED) {
+    log.error "DBG: L'étape 'SOAP Request' a échoué: " + result.getReason()
+    // Tu peux ajouter une assertion ici si tu veux que le TestCase échoue pour cette raison
+    testRunner.fail("La requête SOAP a échoué.")
+    return
+}
+log.info "DBG: L'étape 'SOAP Request' exécutée avec succès."
+
+// Récupération de la réponse
 def response = testRunner.testCase.testSteps["SOAP Request"].testRequest.response.getContentAsString()
-</script></con:config></con:testStep><con:testStep type="groovy" name="Groovy Script" id="7fe6a7ac-3985-4e70-8177-746cb1d2b2c4"><con:settings/><con:config><script>import com.eviware.soapui.support.XmlHolder
+log.info "DBG: Réponse SOAP reçue. Longueur: " + response.length() + " caractères."
+// Ici, tu peux ajouter des logs pour la réponse elle-même si tu veux la voir
+// log.info "DBG: Réponse SOAP complète: " + response]]></script></con:config></con:testStep><con:testStep type="groovy" name="Groovy Script" id="7fe6a7ac-3985-4e70-8177-746cb1d2b2c4"><con:settings/><con:config><script>import com.eviware.soapui.support.XmlHolder
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.apache.poi.ss.usermodel.*
 import java.nio.file.Paths

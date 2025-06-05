@@ -34,8 +34,9 @@ jobs:
 
 
   
-      #- name: Upload test results
-       # uses: actions/upload-artifact@v2
-        #with:
-         # name: soapui-results
-          #path: results
+      - name: Upload Groovy Script Error Log
+        if: failure() # Uploader seulement si le workflow échoue
+        uses: actions/upload-artifact@v4
+        with:
+           name: groovy-script-error-log
+           path: target/Cas_Credit-Verification_operation_credit-GroovyScript-0-FAILED.txt
