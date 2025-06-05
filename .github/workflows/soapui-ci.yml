@@ -5,6 +5,7 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  workflow_dispatch: # Ajouté pour pouvoir lancer manuellement
 
 jobs:
   build:
@@ -21,22 +22,58 @@ jobs:
           java-version: 11
 
       - name: Download and install SoapUI
+        id: install_soapui # Ajout d'un ID pour récupérer le chemin du testrunner
         run: |
           wget https://github.com/hamzanaji123/soapui-ci/releases/download/v2.0/soapUI-light.zip -O soapUI-light.zip
           unzip soapUI-light.zip -d soapui
-          chmod +x soapui/soapUI-light/soapUI-light/bin/testrunner.sh
+          
+          # Correction du chemin ici : une seule instance de 'soapUI-light'
+          echo "Rendre testrunner.sh exécutable..."
+          chmod +x soapui/soapUI-light/bin/testrunner.sh
+          
+          echo "::set-output name=testrunner_path::$(pwd)/soapui/soapUI-light/bin/testrunner.sh"
+
+      - name: Create output directory
+        run: mkdir -p target # Crée le dossier 'target' à la racine du dépôt
 
       - name: Run SoapUI Tests
         run: |
-         soapui/soapUI-light/soapUI-light/bin/testrunner.sh -s"Cas_Credit" -f"target" Stage-soapui-project.xml
+          # Utilisation du chemin correct pour testrunner.sh
+          # Ajout de l'option -c pour spécifier le TestCase
+          # Ajout de l'option -r pour générer les rapports JUnit (nécessaire pour l'upload d'artefacts)
+          # Ajout de l'option -a pour exécuter toutes les assertions
+          # Le chemin du projet XML doit être à la racine du dépôt si c'est là qu'il est.
+          
+          echo "Exécution des tests SoapUI..."
+          ${{ steps.install_soapui.outputs.testrunner_path }} \
+            -s"Cas_Credit" \
+            -c"Verification_operation_credit" \ # Ajout du TestCase spécifique
+            -r \
+            -a \
+            -f"target" \ # Le dossier de sortie des rapports
+            Stage-soapui-project.xml # Le fichier de projet SoapUI
 
-           
-
-
-  
       - name: Upload Groovy Script Error Log
         if: failure() # Uploader seulement si le workflow échoue
         uses: actions/upload-artifact@v4
         with:
-           name: groovy-script-error-log
-           path: target/Cas_Credit-Verification_operation_credit-GroovyScript-0-FAILED.txt
+          name: groovy-script-error-log
+          # Le chemin du fichier de log doit correspondre à la façon dont SoapUI le nomme.
+          # Vérifie le nom exact dans les logs d'une exécution précédente.
+          # Le format est généralement "target/TestSuiteName-TestCaseName-GroovyScript-index-FAILED.txt"
+          # Par exemple: "target/Cas_Credit-Verification_operation_credit-GroovyScript-0-FAILED.txt"
+          path: target/Cas_Credit-Verification_operation_credit-GroovyScript-0-FAILED.txt
+
+      - name: Upload Test Results (JUnit Report) # Ajout pour les rapports JUnit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soapui-test-reports
+          path: target/*.xml # Uploade tous les rapports XML JUnit
+
+      - name: Upload Generated Excel Report # Ajout pour le fichier Excel
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-excel-report
+          path: target/soapui_output.xlsx # Le nom de ton fichier Excel généré
