@@ -24,7 +24,7 @@ jobs:
         run: |
           wget https://github.com/hamzanaji123/soapui-ci/releases/download/v2.0/soapUI-light.zip -O soapUI-light.zip
           unzip soapUI-light.zip -d soapui
-          chmod +x soapui/soapUI-light/bin/testrunner.sh
+          chmod +x soapui/soapUI-light/soapUI-light/bin/testrunner.sh
 
       - name: Run SoapUI Tests
         run: |
