@@ -2557,290 +2557,610 @@ workbook.close()
 
 
 log.info "✅ Données exportées dans ${excelFile.absolutePath}"
-</script></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:testSuite id="b3bd60af-9170-4ecc-bf6e-7851fc3374a0" name="Cas_Credit"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="3f739f86-97a3-4dfa-816f-f6d5b8cc1af5" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Verification_operation_credit" searchProperties="true"><con:settings/><con:testStep type="groovy" name="GroovyScript" id="eeb4b2f4-be05-406f-ba5f-40fdc6b36f5f"><con:settings/><con:config><script><![CDATA[import com.eviware.soapui.impl.wsdl.teststeps.*
-import com.eviware.soapui.support.UISupport
-import com.eviware.soapui.support.UISupport
-import com.eviware.soapui.impl.wsdl.testcase.WsdlTestCase
-import com.eviware.soapui.impl.wsdl.teststeps.*
-import com.eviware.soapui.impl.wsdl.*
-import java.io.File
-import com.eviware.soapui.support.XmlHolder
+</script></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:testSuite id="b3bd60af-9170-4ecc-bf6e-7851fc3374a0" name="Cas_Credit"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="3f739f86-97a3-4dfa-816f-f6d5b8cc1af5" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Verification_operation_credit" searchProperties="true"><con:settings/><con:testStep type="groovy" name="GroovyScript" id="eeb4b2f4-be05-406f-ba5f-40fdc6b36f5f"><con:settings/><con:config><script><![CDATA[/*
+La fonction RequestMethod sert à extraire des données spécifiques à partir d'un fichier Excel,
+en utilisant une référence et un nom de demande comme critères de recherche.
+Elle tient compte des régions fusionnées et renvoie la valeur correspondante lorsque la correspondance est trouvée.
+*/
+
+// Importations des classes Apache POI et SoapUI
 import org.apache.poi.ss.usermodel.*
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFCell
-import org.apache.poi.ss.usermodel.CellType
-import org.apache.poi.ss.usermodel.*
-import org.apache.poi.xssf.usermodel.*
-import org.apache.poi.xssf.usermodel.XSSFCell
-import org.apache.poi.ss.usermodel.CellType
-import javax.swing.JOptionPane
-import com.eviware.soapui.impl.wsdl.teststeps.*
+import org.apache.poi.ss.util.CellRangeAddress
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException // Ajouté pour une meilleure gestion des erreurs d'E/S
+import java.io.FileNotFoundException // Ajouté pour une meilleure gestion des erreurs de fichier
+
+import com.eviware.soapui.impl.wsdl.teststeps.WsdlTestStep
+import com.eviware.soapui.impl.wsdl.testcase.WsdlTestCase
+import com.eviware.soapui.impl.wsdl.WsdlProject
+import com.eviware.soapui.support.UISupport
+import com.eviware.soapui.support.XmlHolder
+
+// --- Définition des chemins des fichiers (MODIFIÉS POUR ÊTRE RELATIFS) ---
+// Ces fichiers sont supposés être à la racine de ton dépôt GitHub
+def excelFilePath = "Testing.xlsx"
+def getCardDetailsRequestPath = "GetCardDetailsRequest.txt"
+def getCardDetailsResponsePath = "GetCardDetailsResponse.txt"
+def feesRequestPath = "FeesRequest.txt" // (Commenté dans ton original, mais gardé pour cohérence)
+def feesResponsePath = "FeesResponse.txt"
+def operationPath = "operation.txt"
+
+def Error_Desc = "Msg Description" // Valeur par défaut, semble être écrasée par la suite.
+
+// --- Définitions de variables initiales ---
 def response = ""
-def map = [ref: "",Validation: "", Error_Code_Resulted: "", Error_Desc_Resulted: "", Description_Result: ""]
-def file = "C:\\Users\\allo\\Desktop\\Projet\\Testing.xlsx"
-def filetxt = "C:\\Users\\allo\\Desktop\\Projet\\GetCardDetailsRequest.txt"
-def Error_Desc = "Msg Description"
-//def requetBody = RequestMethod (file,"A1","Get_Card_Details")
-def requestBody = get_request_txt(filetxt)
-log.info("request"+requestBody)
-/*def testStep = testRunner.testCase.getTestStepByName("GetCardDetailsRequest")
+def map = [ref: "", Validation: "", Error_Code_Resulted: "", Error_Desc_Resulted: "", Description_Result: ""]
+
+
+// --- APPEL INITIAL POUR GET CARD DETAILS REQUEST ---
+log.info("DBG: Tentative de lecture de la requête GetCardDetailsRequest depuis: ${getCardDetailsRequestPath}")
+def requestBody = get_request_txt(getCardDetailsRequestPath)
+if (requestBody == null) {
+    log.error "DBG: ERREUR - La requête GetCardDetailsRequestBody est null. Le fichier n'a pas été lu ou est vide."
+    testRunner.fail("Impossible de lire GetCardDetailsRequest.txt.")
+    return
+}
+log.info("DBG: Contenu de GetCardDetailsRequest.txt lu. Taille: ${requestBody.length()} chars.")
+
+
+/*
+// --- BLOCS COMMENTÉS D'APPELS RÉELS AUX SERVICES WEB ---
+// Ces blocs sont commentés dans ton script original.
+// Je les laisse commentés comme ils sont dans ton code, mais ils représentent les appels réels.
+// S'ils doivent être décommentés et utilisés pour de vrais appels, ils fonctionneraient avec les chemins relatifs.
+
+log.info("DBG: Exécution commentée de l'étape GetCardDetailsRequest.")
+def testStep = testRunner.testCase.getTestStepByName("GetCardDetailsRequest")
+if (testStep == null) {
+    log.error "DBG: ERREUR - L'étape 'GetCardDetailsRequest' n'a pas été trouvée."
+    testRunner.fail("L'étape 'GetCardDetailsRequest' n'a pas été trouvée. Le TestCase échoue.")
+    return
+}
 def request = testStep.testRequest
 request.setRequestContent(requestBody)
 testRunner.runTestStepByName("GetCardDetailsRequest")
 response = testRunner.testCase.testSteps["GetCardDetailsRequest"].testRequest.response.getContentAsString()
+
 def xmlHolder = new com.eviware.soapui.support.XmlHolder(response)
 xmlHolder.namespaces["ns2"] = "http://v1.ws.provider.acp.com/"
 def Error_Code = xmlHolder.getNodeValue("//return//ErrorCode")
 Error_Desc = xmlHolder.getNodeValue("//return//ErrorDesc")
 */
+
+// Utilisation d'un code d'erreur fixe pour le moment (puisque le bloc réel est commenté)
 def Error_Code = "00000"
+log.info("DBG: Error_Code initial (fixe car appel commenté): ${Error_Code}")
 
 if(Error_Code == "00000"){
-	def continentName = "SOLDE_DISPONIBLE"
-	filetxt = "C:\\Users\\allo\\Desktop\\Projet\\GetCardDetailsResponse.txt"
-	response = get_request_txt(filetxt)
-	xml = new XmlSlurper().parseText(response)
-	//def xml = new XmlSlurper().parseText(response)
-	def continent = xml.'**'.findAll { it.name() == 'Key' && it.text() == 'SOLDE_DISPONIBLE'}*.parent()*.Data*.text()
-	//def continent = xml.'**'.find { it.name() == 'KeyValues' && it.'**'.find { it.name() == 'Key' && it.text() == continentName } }
-	def code = continent[0]
-	solde = Integer.parseInt(code)
-	log.info("solde est  "+solde)
-	
-	//filetxt = "C:\\Users\\allo\\Desktop\\Projet\\FeesRequest.txt"
-	//requestBody = get_request_txt(filetxt)
-	requestBody = RequestMethod (file,"A1","Get_fees")
-	log.info("   "+requestBody)
-	//def cn = response.stripMargin()
-	def cn = requestBody.stripMargin()
-	Amount = new XmlSlurper().parseText(cn)
-                              .Body
-                              .feeInquiry_10
-                              .arg0
-                              .TransactionFees
-                              .TransactionAmount
-                              .Amt
-                              .text()
-     log.info("Amount est  "+Amount)
-     Amount = Integer.parseInt(Amount)
-	log.info("Amount est  "+Amount)
-	/*
-	testStep = testRunner.testCase.getTestStepByName("FeesRequest")
-	request = testStep.testRequest
-	request.setRequestContent(requestBody)
-	testRunner.runTestStepByName("FeesRequest")
-	response = testRunner.testCase.testSteps["FeesRequest"].testRequest.response.getContentAsString()
-	xmlHolder = new com.eviware.soapui.support.XmlHolder(response)
-	xmlHolder.namespaces["ns2"] = "http://v1.ws.provider.acp.com/"
-	Error_Code = xmlHolder.getNodeValue("//return//ErrorCode")
-	Error_Desc = xmlHolder.getNodeValue("//return//ErrorDesc")
-	*/
-	Error_Code = "00000"
-	
-	if(Error_Code == "00000"){
-		
-		filetxt = "C:\\Users\\allo\\Desktop\\Projet\\FeesResponse.txt"
-		response = get_request_txt(filetxt)
-		//cn = response.stripMargin()
-		cn = response.stripMargin()
-		 // a la place de request body on doit fait response
-		fees = new XmlSlurper().parseText(cn)
-                                .Body
-                                .feeInquiry_10Response
-                                .return
-                                .TransactionFeesRes
-                                .FeeAmount
-                                .Amt
-                                .text()
-          fees = Integer.parseInt(fees)              
-		log.info("fees est  "+fees)
-		filetxt = "C:\\Users\\allo\\Desktop\\Projet\\operation.txt"
-		requestBody = get_request_txt(filetxt)
-		//requetBody = RequestMethod (file,"A1","Operation")
-		/*
-		testStep = testRunner.testCase.getTestStepByName("OperationRequest")
-		request = testStep.testRequest
-		request.setRequestContent(requestBody)
-		testRunner.runTestStepByName("OperationRequest")
-		response = testRunner.testCase.testSteps["OperationRequest"].testRequest.response.getContentAsString()
-		xmlHolder = new com.eviware.soapui.support.XmlHolder(response)
-		xmlHolder.namespaces["ns2"] = "http://v1.ws.provider.acp.com/"
-		Error_Code = xmlHolder.getNodeValue("//return//ErrorCode")
-		Error_Desc = xmlHolder.getNodeValue("//return//ErrorDesc")
-		*/
-		Error_Code = "00000"
-		
-		if(Error_Code == "00000"){
+    def continentName = "SOLDE_DISPONIBLE"
 
-				somme = solde + (fees * Amount)
-		log.info("la somme calculé est  "+somme)
-		filetxt = "C:\\Users\\allo\\Desktop\\Projet\\GetCardDetailsRequest.txt"
-		requestBody = get_request_txt(filetxt)
-		/*
-		testStep = testRunner.testCase.getTestStepByName("GetCardDetailsRequest")
-		request = testStep.testRequest
-		request.setRequestContent(requestBody)
-		testRunner.runTestStepByName("GetCardDetailsRequest")
-		response = testRunner.testCase.testSteps["GetCardDetailsRequest"].testRequest.response.getContentAsString()
-		xmlHolder = new com.eviware.soapui.support.XmlHolder(response)
-		xmlHolder.namespaces["ns2"] = "http://v1.ws.provider.acp.com/"
-		Error_Code = xmlHolder.getNodeValue("//return//ErrorCode")
-		Error_Desc = xmlHolder.getNodeValue("//return//ErrorDesc")
-		Error_Desc = xmlHolder.getNodeValue("//return//ErrorDesc")
-		*/
-		Error_Code = "00000"
-		
-		if(Error_Code == "00000"){
-				//xml = new XmlSlurper().parseText(response)
-				filetxt = "C:\\Users\\allo\\Desktop\\Projet\\GetCardDetailsResponse.txt"
-				response = get_request_txt(filetxt)
-				xml = new XmlSlurper().parseText(response)
-				continent = xml.'**'.find { it.name() == 'KeyValues' && it.'**'.find { it.name() == 'Key' && it.text() == continentName } }
-				code = continent?.Data?.text()
-				solde = Integer.parseInt(code)
-				log.info("le solde dans la reponse est  "+solde)
-				if(solde == somme ){
-					
-					map = [ref: "A1", Validation: "DONE", Error_Code_Resulted: Error_Code, Error_Desc_Resulted: Error_Desc, Description_Result: "Calcul Correcte"]
-					methode(file, map)
-					return
-					}
-				else{
-					map = [ref: "A1", Validation: "NOT OKK!", Error_Code_Resulted: Error_Code, Error_Desc_Resulted: Error_Desc, Description_Result: "ERROR in  calculation"]
-					methode(file, map)
-					return
-					}
-							 }
-			else{
-				log.info("ERROR IN GETCARDDETAIL WEB SERVER")
-				map = [ref: "A1", Validation: "NOT OKK!", Error_Code_Resulted: Error_Code, Error_Desc_Resulted: Error_Desc, Description_Result: "ERROR IN GETCARDDETAIL WEB SERVER"]
-				methode(file, map)
-				def message = "ERROR in web server: GetCardDetails(). for more details check report file"
-				def titre = "alerte"
-				JOptionPane.showMessageDialog(null, message, titre, JOptionPane.INFORMATION_MESSAGE)
-				return
-              }
-							 }
-		else{
-			log.info("error operation")
-			map = [ref: "A1", Validation: "NOT OKK!", Error_Code_Resulted: Error_Code, Error_Desc_Resulted: Error_Desc, Description_Result: "ERROR IN OPERATION WEB SERVER"]
-			methode(file, map)
-			def message = "ERROR in web server: Operation(). for more details check report file"
-			def titre = "alerte"
-			JOptionPane.showMessageDialog(null, message, titre, JOptionPane.INFORMATION_MESSAGE)
-			return
-              }
+    log.info("DBG: Tentative de lecture de la réponse GetCardDetailsResponse depuis: ${getCardDetailsResponsePath}")
+    response = get_request_txt(getCardDetailsResponsePath)
+    if (response == null) {
+        log.error "DBG: ERREUR - La réponse GetCardDetailsResponse est null. Le fichier n'a pas été lu ou est vide."
+        testRunner.fail("Impossible de lire GetCardDetailsResponse.txt.")
+        return
+    }
+    log.info("DBG: Contenu de GetCardDetailsResponse.txt lu. Taille: ${response.length()} chars.")
+
+    def xml
+    try {
+        xml = new XmlSlurper().parseText(response)
+        log.info("DBG: Réponse GetCardDetailsResponse parsée avec XmlSlurper.")
+    } catch (Exception e) {
+        log.error "DBG: ERREUR lors du parsing de la réponse GetCardDetailsResponse: " + e.getMessage()
+        testRunner.fail("Erreur de parsing XML pour GetCardDetailsResponse.")
+        return
+    }
+
+    def continent = xml.'**'.findAll { it.name() == 'Key' && it.text() == 'SOLDE_DISPONIBLE'}*.parent()*.Data*.text()
+    def solde
+    if (continent && continent[0]) {
+        try {
+            solde = Integer.parseInt(continent[0])
+            log.info("DBG: Solde initial trouvé: ${solde}")
+        } catch (NumberFormatException e) {
+            log.error "DBG: ERREUR - Impossible de parser le solde en entier: '${continent[0]}'. " + e.getMessage()
+            testRunner.fail("Format numérique invalide pour le solde initial.")
+            return
+        }
+    } else {
+        log.error "DBG: ERREUR - La clé 'SOLDE_DISPONIBLE' ou sa valeur n'a pas été trouvée dans la réponse GetCardDetailsResponse."
+        testRunner.fail("Clé 'SOLDE_DISPONIBLE' introuvable dans GetCardDetailsResponse.")
+        return
+    }
+
+    // --- FEES REQUEST (Commenté comme dans l'original) ---
+    // log.info("DBG: Tentative de lecture de la requête FeesRequest depuis l'Excel: ${excelFilePath}")
+    // requestBody = RequestMethod (excelFilePath,"A1","Get_fees")
+    // if (requestBody == null) {
+    //     log.error "DBG: ERREUR - La requête Get_fees (depuis Excel) est null."
+    //     testRunner.fail("Impossible de récupérer la requête Get_fees depuis l'Excel.")
+    //     return
+    // }
+    // log.info("DBG: Contenu de la requête FeesRequest lu. Taille: ${requestBody.length()} chars.")
+
+    // --- OU : FEES REQUEST LUE DEPUIS UN FICHIER TXT (si FeesRequest.txt est utilisé) ---
+    log.info("DBG: Tentative de lecture de la requête FeesRequest depuis: ${feesRequestPath}")
+    requestBody = get_request_txt(feesRequestPath) // L'original utilise RequestMethod ici, mais tu as un fichier FeesRequest.txt. À clarifier.
+    if (requestBody == null) {
+        log.error "DBG: ERREUR - La requête FeesRequest est null. Le fichier n'a pas été lu ou est vide."
+        testRunner.fail("Impossible de lire FeesRequest.txt.")
+        return
+    }
+    log.info("DBG: Contenu de FeesRequest.txt lu. Taille: ${requestBody.length()} chars.")
+
+    def Amount
+    try {
+        def cn = requestBody.stripMargin()
+        Amount = new XmlSlurper().parseText(cn)
+                                 .Body
+                                 .feeInquiry_10
+                                 .arg0
+                                 .TransactionFees
+                                 .TransactionAmount
+                                 .Amt
+                                 .text()
+        log.info("DBG: Montant Fees (brut) trouvé: ${Amount}")
+        Amount = Integer.parseInt(Amount)
+        log.info("DBG: Montant Fees (parsed) trouvé: ${Amount}")
+    } catch (Exception e) {
+        log.error "DBG: ERREUR lors du parsing ou conversion du montant Fees: " + e.getMessage()
+        testRunner.fail("Erreur lors du traitement du montant Fees.")
+        return
+    }
+
+    /*
+    // --- APPEL RÉEL FEES REQUEST (Commenté) ---
+    log.info("DBG: Exécution commentée de l'étape FeesRequest.")
+    testStep = testRunner.testCase.getTestStepByName("FeesRequest")
+    if (testStep == null) {
+        log.error "DBG: ERREUR - L'étape 'FeesRequest' n'a pas été trouvée."
+        testRunner.fail("L'étape 'FeesRequest' n'a pas été trouvée. Le TestCase échoue.")
+        return
+    }
+    request = testStep.testRequest
+    request.setRequestContent(requestBody)
+    testRunner.runTestStepByName("FeesRequest")
+    response = testRunner.testCase.testSteps["FeesRequest"].testRequest.response.getContentAsString()
+    xmlHolder = new com.eviware.soapui.support.XmlHolder(response)
+    xmlHolder.namespaces["ns2"] = "http://v1.ws.provider.acp.com/"
+    Error_Code = xmlHolder.getNodeValue("//return//ErrorCode")
+    Error_Desc = xmlHolder.getNodeValue("//return//ErrorDesc")
+    */
+    Error_Code = "00000" // Fixe à "00000" car l'appel est commenté
+    log.info("DBG: Error_Code pour Fees (fixe car appel commenté): ${Error_Code}")
+
+    if(Error_Code == "00000"){
+        log.info("DBG: Tentative de lecture de la réponse FeesResponse depuis: ${feesResponsePath}")
+        response = get_request_txt(feesResponsePath)
+        if (response == null) {
+            log.error "DBG: ERREUR - La réponse FeesResponse est null. Le fichier n'a pas été lu ou est vide."
+            testRunner.fail("Impossible de lire FeesResponse.txt.")
+            return
+        }
+        log.info("DBG: Contenu de FeesResponse.txt lu. Taille: ${response.length()} chars.")
+
+        def fees
+        try {
+            def cn = response.stripMargin()
+            fees = new XmlSlurper().parseText(cn)
+                                  .Body
+                                  .feeInquiry_10Response
+                                  .return
+                                  .TransactionFeesRes
+                                  .FeeAmount
+                                  .Amt
+                                  .text()
+            fees = Integer.parseInt(fees)
+            log.info("DBG: Fees (parsed) trouvé: ${fees}")
+        } catch (Exception e) {
+            log.error "DBG: ERREUR lors du parsing ou conversion des fees: " + e.getMessage()
+            testRunner.fail("Erreur lors du traitement des fees.")
+            return
+        }
+
+        log.info("DBG: Tentative de lecture de la requête Operation depuis: ${operationPath}")
+        requestBody = get_request_txt(operationPath)
+        if (requestBody == null) {
+            log.error "DBG: ERREUR - La requête Operation est null. Le fichier n'a pas été lu ou est vide."
+            testRunner.fail("Impossible de lire operation.txt.")
+            return
+        }
+        log.info("DBG: Contenu de operation.txt lu. Taille: ${requestBody.length()} chars.")
+
+        /*
+        // --- APPEL RÉEL OPERATION REQUEST (Commenté) ---
+        log.info("DBG: Exécution commentée de l'étape OperationRequest.")
+        testStep = testRunner.testCase.getTestStepByName("OperationRequest")
+        if (testStep == null) {
+            log.error "DBG: ERREUR - L'étape 'OperationRequest' n'a pas été trouvée."
+            testRunner.fail("L'étape 'OperationRequest' n'a pas été trouvée. Le TestCase échoue.")
+            return
+        }
+        request = testStep.testRequest
+        request.setRequestContent(requestBody)
+        testRunner.runTestStepByName("OperationRequest")
+        response = testRunner.testCase.testSteps["OperationRequest"].testRequest.response.getContentAsString()
+        xmlHolder = new com.eviware.soapui.support.XmlHolder(response)
+        xmlHolder.namespaces["ns2"] = "http://v1.ws.provider.acp.com/"
+        Error_Code = xmlHolder.getNodeValue("//return//ErrorCode")
+        Error_Desc = xmlHolder.getNodeValue("//return//ErrorDesc")
+        */
+        Error_Code = "00000" // Fixe à "00000" car l'appel est commenté
+        log.info("DBG: Error_Code pour Operation (fixe car appel commenté): ${Error_Code}")
+
+        if(Error_Code == "00000"){
+            def somme = solde + (fees * Amount)
+            log.info("DBG: La somme calculée est: ${somme}")
+
+            log.info("DBG: Re-lecture de la requête GetCardDetailsRequest pour la vérification: ${getCardDetailsRequestPath}")
+            requestBody = get_request_txt(getCardDetailsRequestPath)
+            if (requestBody == null) {
+                log.error "DBG: ERREUR - La requête GetCardDetailsRequest (vérif) est null."
+                testRunner.fail("Impossible de lire GetCardDetailsRequest.txt pour la vérification.")
+                return
+            }
+            log.info("DBG: Contenu de GetCardDetailsRequest.txt (vérif) lu. Taille: ${requestBody.length()} chars.")
+
+            /*
+            // --- APPEL RÉEL GETCARDDETAILS REQUEST (Vérification - Commenté) ---
+            log.info("DBG: Exécution commentée de l'étape GetCardDetailsRequest (Vérification).")
+            testStep = testRunner.testCase.getTestStepByName("GetCardDetailsRequest")
+            if (testStep == null) {
+                log.error "DBG: ERREUR - L'étape 'GetCardDetailsRequest' (Vérif) n'a pas été trouvée."
+                testRunner.fail("L'étape 'GetCardDetailsRequest' (Vérif) n'a pas été trouvée. Le TestCase échoue.")
+                return
+            }
+            request = testStep.testRequest
+            request.setRequestContent(requestBody)
+            testRunner.runTestStepByName("GetCardDetailsRequest")
+            response = testRunner.testCase.testSteps["GetCardDetailsRequest"].testRequest.response.getContentAsString()
+            xmlHolder = new com.eviware.soapui.support.XmlHolder(response)
+            xmlHolder.namespaces["ns2"] = "http://v1.ws.provider.acp.com/"
+            Error_Code = xmlHolder.getNodeValue("//return//ErrorCode")
+            Error_Desc = xmlHolder.getNodeValue("//return//ErrorDesc")
+            Error_Desc = xmlHolder.getNodeValue("//return//ErrorDesc") // Redondant ici
+            */
+            Error_Code = "00000" // Fixe à "00000" car l'appel est commenté
+            log.info("DBG: Error_Code pour GetCardDetails (Vérif - fixe car appel commenté): ${Error_Code}")
+
+            if(Error_Code == "00000"){
+                log.info("DBG: Re-lecture de la réponse GetCardDetailsResponse pour la vérification: ${getCardDetailsResponsePath}")
+                response = get_request_txt(getCardDetailsResponsePath)
+                if (response == null) {
+                    log.error "DBG: ERREUR - La réponse GetCardDetailsResponse (vérif) est null."
+                    testRunner.fail("Impossible de lire GetCardDetailsResponse.txt pour la vérification.")
+                    return
+                }
+                log.info("DBG: Contenu de GetCardDetailsResponse.txt (vérif) lu. Taille: ${response.length()} chars.")
+
+                try {
+                    xml = new XmlSlurper().parseText(response)
+                    log.info("DBG: Réponse GetCardDetailsResponse (vérif) parsée avec XmlSlurper.")
+                } catch (Exception e) {
+                    log.error "DBG: ERREUR lors du parsing de la réponse GetCardDetailsResponse (vérif): " + e.getMessage()
+                    testRunner.fail("Erreur de parsing XML pour GetCardDetailsResponse (vérif).")
+                    return
+                }
+
+                // Attention: 'continentName' doit correspondre à la valeur de Key utilisée dans l'Excel/XML
+                // Ici, il est "SOLDE_DISPONIBLE", comme plus haut
+                def continent = xml.'**'.find { it.name() == 'KeyValues' && it.'**'.find { it.name() == 'Key' && it.text() == continentName } }
+                def code
+                if (continent) {
+                    code = continent.Data?.text()
+                } else {
+                    log.error "DBG: ERREUR - La structure XML pour 'KeyValues' ou 'Key' n'a pas été trouvée dans la réponse."
+                    testRunner.fail("Structure XML 'KeyValues'/'Key' introuvable dans la réponse.")
+                    return
+                }
+
+                if (code) {
+                    try {
+                        solde = Integer.parseInt(code)
+                        log.info("DBG: Le solde final dans la réponse est: ${solde}")
+                    } catch (NumberFormatException e) {
+                        log.error "DBG: ERREUR - Impossible de parser le solde final en entier: '${code}'. " + e.getMessage()
+                        testRunner.fail("Format numérique invalide pour le solde final.")
+                        return
+                    }
+                } else {
+                    log.error "DBG: ERREUR - La valeur 'Data' n'a pas été trouvée pour la clé '${continentName}'."
+                    testRunner.fail("Valeur 'Data' introuvable pour la clé '${continentName}'.")
+                    return
+                }
+
+                if(solde == somme ){
+                    map = [ref: "A1", Validation: "DONE", Error_Code_Resulted: Error_Code, Error_Desc_Resulted: Error_Desc, Description_Result: "Calcul Correcte"]
+                    log.info("DBG: Calcul Correcte. Mise à jour de l'Excel.")
+                    methode(excelFilePath, map)
+                    return
+                } else {
+                    map = [ref: "A1", Validation: "NOT OKK!", Error_Code_Resulted: Error_Code, Error_Desc_Resulted: Error_Desc, Description_Result: "ERROR in calculation"]
+                    log.error("DBG: ERREUR - Calcul Incorrecte. Mise à jour de l'Excel.")
+                    methode(excelFilePath, map)
+                    return
+                }
+            } else {
+                log.error("DBG: ERREUR IN GETCARDDETAIL WEB SERVER. Error_Code: ${Error_Code}")
+                map = [ref: "A1", Validation: "NOT OKK!", Error_Code_Resulted: Error_Code, Error_Desc_Resulted: Error_Desc, Description_Result: "ERROR IN GETCARDDETAIL WEB SERVER"]
+                methode(excelFilePath, map)
+                def message = "ERROR in web server: GetCardDetails(). for more details check report file"
+                // JOptionPane.showMessageDialog(null, message, "alerte", JOptionPane.INFORMATION_MESSAGE) // Commenté pour GHA
+                return
+            }
+        } else {
+            log.error("DBG: ERREUR IN OPERATION WEB SERVER. Error_Code: ${Error_Code}")
+            map = [ref: "A1", Validation: "NOT OKK!", Error_Code_Resulted: Error_Code, Error_Desc_Resulted: Error_Desc, Description_Result: "ERROR IN OPERATION WEB SERVER"]
+            methode(excelFilePath, map)
+            def message = "ERROR in web server: Operation(). for more details check report file"
+            // JOptionPane.showMessageDialog(null, message, "alerte", JOptionPane.INFORMATION_MESSAGE) // Commenté pour GHA
+            return
+        }
+    } else {
+        log.error("DBG: ERREUR IN GETFEES WEB SERVER. Error_Code: ${Error_Code}")
+        map = [ref: "A1", Validation: "NOT OKK!", Error_Code_Resulted: Error_Code, Error_Desc_Resulted: Error_Desc, Description_Result: "ERROR IN GETFEES WEB SERVER"]
+        methode(excelFilePath, map)
+
+        def message = "ERROR in Get_Fees web server for more details open report file"
+        // JOptionPane.showMessageDialog(null, message, "alerte", JOptionPane.INFORMATION_MESSAGE) // Commenté pour GHA
+        return
+    }
+} else {
+    log.error("DBG: ERREUR IN GETCARDDETAILS WEB SERVER (Initial). Error_Code: ${Error_Code}")
+    map = [ref: "A1", Validation: "NOT OKK!", Error_Code_Resulted: Error_Code, Error_Desc_Resulted: Error_Desc, Description_Result: "ERROR IN GETCARDDETAILS WEB SERVER"]
+    methode(excelFilePath, map)
+    def message = "ERROR in web server: GetCardDetails. for more details check report file"
+    // JOptionPane.showMessageDialog(null, message, "alerte", JOptionPane.INFORMATION_MESSAGE) // Commenté pour GHA
+    return
 }
 
-	else{
-		log.info("ERROR fess")
-		map = [ref: "A1", Validation: "NOT OKK!", Error_Code_Resulted: Error_Code, Error_Desc_Resulted: Error_Desc, Description_Result: "ERROR IN GETFEES WEB SERVER"]
-		methode(file, map)
-		
-		def message = "ERROR in Get_Fees web server for more details open report file"
-		def titre = "alerte"
-		JOptionPane.showMessageDialog(null, message, titre, JOptionPane.INFORMATION_MESSAGE)
-
-		return
-		}
-}
-else{
-log.info("Error")
-map = [ref: "A1",j: 4,Validation: "NOT OKK!", Error_Code_Resulted: Error_Code, Error_Desc_Resulted: Error_Desc, Description_Result: "ERROR IN GETCARDDETAILS WEB SERVER"]
-methode(file, map)
-def message = "ERROR in web server: GetCardDetails. for more details check report file"
-def titre = "alerte"
-JOptionPane.showMessageDialog(null, message, titre, JOptionPane.INFORMATION_MESSAGE)
-
-return
-}
+// --- FONCTION methode (pour l'écriture Excel) ---
 def methode(filePath, map){
+    log.info("DBG: Début de la fonction 'methode' pour écrire dans l'Excel: ${filePath}")
+    File excelFile = new File(filePath)
+    if (!excelFile.exists()) {
+        log.error "DBG: ERREUR - Le fichier Excel pour l'écriture n'a PAS été trouvé à l'emplacement: ${filePath}"
+        UISupport.showErrorMessage("Le fichier Excel n'a pas été trouvé pour l'écriture: ${filePath}")
+        // Ne lance pas d'exception ici si le reste du script peut continuer, mais log l'erreur.
+        return // Empêche le reste de la fonction de s'exécuter si le fichier n'est pas là
+    } else {
+        log.info "DBG: Le fichier Excel pour l'écriture a été trouvé à: ${filePath}"
+    }
 
-	try {
-    		FileInputStream fis = new FileInputStream(filePath)
-    		Workbook workbook = new XSSFWorkbook(fis)
-    		XSSFSheet sheet = workbook.getSheetAt(0)
-    		fis.close()
-    
-    		for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
-     		row = sheet.getRow(i);
-	
-     		if (row.getCell(0).getStringCellValue() == map.ref){
-          		for(int mp = 0; mp < map.size(); mp++){
-               		def Key = map.keySet().toList()[mp]
-          			if (fonction(sheet.getRow(0),Key) != null){
-          				sheet.getRow(i).createCell(fonction(sheet.getRow(0),Key)).setCellValue(map.get(Key))
-          			}
-          		}
-          	}
-          }
-       
-		FileOutputStream fos = new FileOutputStream(filePath)
-    		workbook.write(fos)
-		fos.close()
-   		workbook.close()
-   		log.info( "Excel modifiée avec succès!")
+    FileInputStream fis = null
+    Workbook workbook = null
+    FileOutputStream fos = null
+    try {
+        fis = new FileInputStream(excelFile)
+        workbook = new XSSFWorkbook(fis)
+        XSSFSheet sheet = workbook.getSheetAt(0) // Assurez-vous que c'est la bonne feuille (Feuil1)
+        fis.close() // Ferme le flux de lecture
 
-		} catch (IOException e) {
-    			e.printStackTrace()
-    			log.info( "Une erreur s'est produite lors de la modification du fichier Excel.")
-		}}
+        log.info("DBG: Parcourir les lignes pour la mise à jour...")
+        for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
+            Row row = sheet.getRow(i)
+            if (row == null) {
+                log.warn "DBG: Ligne ${i} est null lors de l'écriture, sautée."
+                continue
+            }
+            Cell cellRef = row.getCell(0)
+            if (cellRef == null || cellRef.getStringCellValue() == null) {
+                log.warn "DBG: Cellule de référence (colonne 0) à la ligne ${i} est null ou vide, sautée."
+                continue
+            }
+            if (cellRef.getStringCellValue() == map.ref){ // Comparaison avec la référence (ex: "A1")
+                log.info("DBG: Référence '${map.ref}' trouvée à la ligne ${i}. Mise à jour des colonnes.")
+                for(String key : map.keySet()){ // Itération sur les clés de la map
+                    // Fonction pour trouver l'index de la colonne (définie plus bas)
+                    Integer colIndex = fonction(sheet.getRow(0), key) // Utilise 'key' au lieu de 'Key'
+                    if (colIndex != -1){ // Vérifie si la colonne a été trouvée
+                        Cell cellToUpdate = row.getCell(colIndex)
+                        if (cellToUpdate == null) {
+                            cellToUpdate = row.createCell(colIndex) // Crée la cellule si elle n'existe pas
+                            log.info("DBG: Cellule créée à la ligne ${i}, colonne ${colIndex} pour la clé '${key}'.")
+                        }
+                        def valueToSet = map.get(key)
+                        // Log pour voir la valeur et son type
+                        log.info("DBG: Écriture de la valeur '${valueToSet}' (type: ${valueToSet.getClass().name}) dans la cellule (${i}, ${colIndex}) pour la clé '${key}'.")
 
+                        // Gérer différents types pour l'écriture dans Excel
+                        if (valueToSet instanceof String) {
+                            cellToUpdate.setCellValue(valueToSet)
+                        } else if (valueToSet instanceof Number) {
+                            cellToUpdate.setCellValue(valueToSet.doubleValue()) // Pour les nombres
+                        } else if (valueToSet instanceof Boolean) {
+                            cellToUpdate.setCellValue(valueToSet)
+                        } else {
+                            cellToUpdate.setCellValue(valueToSet.toString()) // Convertir tout le reste en String
+                        }
+                    } else {
+                        log.warn("DBG: Colonne '${key}' non trouvée dans l'en-tête pour la mise à jour.")
+                    }
+                }
+                // Si tu veux t'arrêter après avoir trouvé la première correspondance, tu peux ajouter un 'break' ici.
+                // break
+            }
+        }
 
-def fonction(row,RequestName){
-	
-	for (int j = 0; j < row.getPhysicalNumberOfCells(); j++) {
-		
-		Cell cell = row.getCell(j)
-		if (cell.getStringCellValue() == RequestName){
-			def indexc = cell.columnIndex
-			//log.info("index"+indexc)
-			return indexc
-			}
-	}
-	}
-	def RequestMethod (filePath,Ref,RequestName){
-	def req = "Web_Services"
-	def index = 0
-	File file = new File(filePath)
-	FileInputStream fis = new FileInputStream(file)
-	XSSFWorkbook workbook = new XSSFWorkbook(fis)
-	XSSFSheet sheet = workbook.getSheetAt(1)
-	def mergedRegions = sheet.getMergedRegions()
-	log.info(""+mergedRegions.isEmpty())
-	Row row = sheet.getRow(0)
-	index = fonction(row,req)
-	for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
-     	row = sheet.getRow(i)
-		cell = row.getCell(0)
-		if (cell.getStringCellValue().toString() == Ref){
-			if (! mergedRegions.isEmpty() ){
-				for (region in mergedRegions) {
-    					if (region.containsRow(i)) {
-    						for(r in region.firstRow .. region.getLastRow() ){
-    							if(sheet.getRow(r).getCell(index).getStringCellValue() == RequestName ){
-    								def val = sheet.getRow(r).getCell(index + 1).getStringCellValue()
-    								log.info("SUCCES")
-    								return val
-    							}
-    						}
-    					}
-				}
-				
-			}
-			if(row.getCell(index).getStringCellValue() == RequestName){
-    				def val = row.getCell(index+1).getStringCellValue()
-    				log.info("SUCCES if ")
-    				return val
-			}
-		}
-	}
+        fos = new FileOutputStream(excelFile) // Utilise le même chemin que pour la lecture
+        workbook.write(fos)
+        log.info("DBG: Excel modifiée et sauvegardée avec succès à: ${filePath}")
+
+    } catch (FileNotFoundException e) {
+        log.error "DBG: ERREUR - Fichier non trouvé lors de la modification de l'Excel: " + e.getMessage()
+        // e.printStackTrace() // Désactivé pour des logs plus propres sur GHA, utilise les logs Groovy.
+        // UISupport.showErrorMessage("Fichier Excel introuvable pour la modification: " + e.getMessage()) // Commenté pour GHA
+    } catch (IOException e) {
+        log.error "DBG: ERREUR d'E/S lors de la modification du fichier Excel: " + e.getMessage()
+        // e.printStackTrace() // Désactivé pour des logs plus propres sur GHA
+        // UISupport.showErrorMessage("Erreur d'écriture dans l'Excel: " + e.getMessage()) // Commenté pour GHA
+    } catch (Exception e) {
+        log.error "DBG: ERREUR inattendue lors de la modification du fichier Excel: " + e.getMessage()
+        // e.printStackTrace() // Désactivé
+        // UISupport.showErrorMessage("Erreur inattendue lors de la modification de l'Excel: " + e.getMessage()) // Commenté pour GHA
+    } finally {
+        // S'assurer que les flux sont fermés même en cas d'erreur
+        if (fis != null) try { fis.close() } catch (IOException ignored) {}
+        if (fos != null) try { fos.close() } catch (IOException ignored) {}
+        if (workbook != null) try { workbook.close() } catch (IOException ignored) {}
+        log.info("DBG: Flux de fichiers Excel fermés.")
+    }
 }
+
+
+// --- FONCTION fonction (pour trouver l'index de colonne) ---
+// Déjà réécrite avec plus de robustesse dans la réponse précédente.
+// Je la remets ici pour que le script soit complet.
+def fonction(row, RequestName){
+    log.info "DBG: Début de la fonction 'fonction' pour trouver l'index de la colonne: '${RequestName}'"
+    if (row == null) {
+        log.error "DBG: ERREUR - La ligne d'en-tête est null dans la fonction 'fonction'."
+        return -1 // Indique que la ligne est vide ou non valide
+    }
+    for (int j = 0; j < row.getPhysicalNumberOfCells(); j++) {
+        Cell cell = row.getCell(j)
+        if (cell != null) {
+            // Traiter différents types de cellules, surtout si l'en-tête n'est pas toujours string
+            def cellValue = ""
+            if (cell.getCellType() == CellType.STRING) {
+                cellValue = cell.getStringCellValue().trim()
+            } else if (cell.getCellType() == CellType.NUMERIC) {
+                cellValue = String.valueOf(cell.getNumericCellValue()).trim()
+            }
+            // Ajoutez d'autres types si nécessaire, par exemple CellType.FORMULA, CellType.BOOLEAN
+
+            if (cellValue == RequestName){
+                def indexc = cell.columnIndex
+                log.info("DBG: Index de la colonne '${RequestName}' trouvé: ${indexc}")
+                return indexc
+            }
+        }
+    }
+    log.warn "DBG: La colonne '${RequestName}' n'a pas été trouvée dans la ligne d'en-tête."
+    return -1 // Retourne -1 si la colonne n'est pas trouvée
+}
+
+// --- FONCTION RequestMethod (pour la lecture Excel) ---
+// La version fournie ici est celle de ton premier script, elle n'est pas modifiée en profondeur,
+// mais elle est incluse pour la complétude du script.
+// Le chemin 'filePath' sera la variable 'excelFilePath' définie en haut.
+def RequestMethod (filePath,Ref,RequestName){
+    log.info "DBG: Début de l'exécution de RequestMethod (lecture Excel)."
+    log.info "DBG: Chemin du fichier Excel fourni: ${filePath}"
+
+    def req = "Web_Services" // Variable interne à la fonction
+    def index = 0
+
+    File file = new File(filePath)
+    if (!file.exists()) {
+        log.error "DBG: ERREUR CRITIQUE - Le fichier Excel n'a PAS été trouvé à l'emplacement: ${filePath} dans RequestMethod."
+        throw new FileNotFoundException("Le fichier Excel n'a pas été trouvé à: ${filePath}")
+    }
+
+    FileInputStream fis = null
+    XSSFWorkbook workbook = null
+    try {
+        fis = new FileInputStream(file)
+        workbook = new XSSFWorkbook(fis)
+        log.info "DBG: Fichier Excel chargé avec succès dans RequestMethod."
+    } catch (Exception e) {
+        log.error "DBG: ERREUR lors du chargement du classeur Excel dans RequestMethod: " + e.getMessage()
+        throw e
+    } finally {
+        if (fis != null) try { fis.close() } catch (IOException ignored) {}
+    }
+
+    XSSFSheet sheet = workbook.getSheetAt(1) // Assurez-vous que c'est la bonne feuille (index 1)
+    log.info "DBG: Accès à la feuille d'index 1 (deuxième feuille) réussi dans RequestMethod."
+
+    def mergedRegions = sheet.getMergedRegions()
+    log.info("DBG: La feuille contient des régions fusionnées : " + !mergedRegions.isEmpty())
+
+    Row row = sheet.getRow(0)
+    if (row == null) {
+        log.error "DBG: ERREUR - La première ligne de la feuille est vide dans RequestMethod."
+        workbook.close()
+        throw new RuntimeException("La première ligne de la feuille Excel est vide dans RequestMethod.")
+    }
+    index = fonction(row,req)
+    if (index == -1) {
+        log.error "DBG: ERREUR - La colonne 'Web_Services' n'a pas été trouvée dans la première ligne de RequestMethod."
+        workbook.close()
+        throw new RuntimeException("La colonne 'Web_Services' n'a pas été trouvée dans l'Excel en RequestMethod.")
+    }
+
+    for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
+        row = sheet.getRow(i)
+        if (row == null) continue
+
+        Cell cellRef = row.getCell(0)
+        if (cellRef == null || cellRef.getStringCellValue() == null) continue
+
+        if (cellRef.getStringCellValue().toString() == Ref){
+            if (! mergedRegions.isEmpty() ){
+                for (region in mergedRegions) {
+                    if (region.containsRow(i)) {
+                        for(r in region.firstRow .. region.getLastRow() ){
+                            Row currentRow = sheet.getRow(r)
+                            if (currentRow == null) continue
+                            Cell requestNameCell = currentRow.getCell(index)
+                            if (requestNameCell == null || requestNameCell.getStringCellValue() == null) continue
+
+                            if(requestNameCell.getStringCellValue() == RequestName ){
+                                Cell valueCell = currentRow.getCell(index + 1)
+                                if (valueCell == null || valueCell.getStringCellValue() == null) continue
+                                def val = valueCell.getStringCellValue()
+                                log.info("DBG: SUCCES - Valeur trouvée dans région fusionnée en RequestMethod: ${val}")
+                                workbook.close()
+                                return val
+                            }
+                        }
+                    }
+                }
+            }
+            Cell requestNameCell = row.getCell(index)
+            if (requestNameCell != null && requestNameCell.getStringCellValue() != null && requestNameCell.getStringCellValue() == RequestName){
+                Cell valueCell = row.getCell(index + 1)
+                if (valueCell != null && valueCell.getStringCellValue() != null) {
+                    def val = valueCell.getStringCellValue()
+                    log.info("DBG: SUCCES - Valeur trouvée directement en RequestMethod: ${val}")
+                    workbook.close()
+                    return val
+                }
+            }
+        }
+    }
+    log.warn "DBG: Aucune valeur trouvée pour la référence '${Ref}' et la demande '${RequestName}' en RequestMethod."
+    workbook.close()
+    return null
+}
+
+// --- FONCTION get_request_txt (pour lire les fichiers .txt) ---
 def get_request_txt(filePath){
-     def fileP = new File(filePath)
-     def requetBody = fileP.getText()
-     return requetBody
-	}]]></script></con:config></con:testStep><con:testStep type="request" name="GetCardDetailsRequest" id="8677d0f7-e9bb-48a8-bb10-98d4ace02fa4"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>FullCountryInfo</con:operation><con:request name="GetCardDetailsRequest" id="872803b7-05ff-4417-a013-4c0f85dbb3e6"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">\r
+    log.info("DBG: Tentative de lecture du fichier texte: ${filePath}")
+    File fileP = new File(filePath)
+    if (!fileP.exists()) {
+        log.error "DBG: ERREUR - Le fichier texte n'a PAS été trouvé à l'emplacement: ${filePath}"
+        // UISupport.showErrorMessage("Le fichier texte n'a pas été trouvé à: ${filePath}") // Commenté pour GHA
+        return null // Retourne null si le fichier n'existe pas
+    }
+    try {
+        def requestBody = fileP.getText('UTF-8') // Spécifiez l'encodage si connu
+        log.info("DBG: Fichier texte lu avec succès. Taille: ${requestBody.length()} chars.")
+        return requestBody
+    } catch (IOException e) {
+        log.error "DBG: ERREUR d'E/S lors de la lecture du fichier texte: " + e.getMessage()
+        // UISupport.showErrorMessage("Erreur de lecture du fichier texte: " + e.getMessage()) // Commenté pour GHA
+        return null
+    }
+}]]></script></con:config></con:testStep><con:testStep type="request" name="GetCardDetailsRequest" id="8677d0f7-e9bb-48a8-bb10-98d4ace02fa4"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CountryInfoServiceSoapBinding12</con:interface><con:operation>FullCountryInfo</con:operation><con:request name="GetCardDetailsRequest" id="872803b7-05ff-4417-a013-4c0f85dbb3e6"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="http://www.oorsprong.org/websamples.countryinfo">\r
    <soap:Header/>\r
    <soap:Body>\r
       <web:FullCountryInfo>\r
