@@ -28,7 +28,7 @@ jobs:
 
       - name: Run SoapUI Tests
         run: |
-         soapui/soapUI-light/bin/testrunner.sh -s"Cas_Credit" -f"target" Stage-soapui-project.xml
+         soapui/soapUI-light/soapUI-light/bin/testrunner.sh -s"Cas_Credit" -f"target" Stage-soapui-project.xml
 
            
 
