@@ -20,37 +20,15 @@ jobs:
           distribution: 'temurin'
           java-version: 11
 
-      - name: Download and install SoapUI (Full Version)
-        id: install_soapui # Garde cet ID
+      - name: Download and install SoapUI
         run: |
-            SOAPUI_VERSION="5.8.0" # Utilise la version que tu souhaites, vérifie la sur smartbear.com
-            SOAPUI_INSTALL_DIR="/opt/SoapUI" # Répertoire d'installation standard
-  
-            echo "Téléchargement de SoapUI ${SOAPUI_VERSION}..."
-            # Télécharger la version Linux (un fichier .zip, .sh, ou .tar.gz)
-            # Exemple pour .zip (la plus simple à décompresser sur Ubuntu)
-            wget https://dl.eviware.com/soapuios/${SOAPUI_VERSION}/SoapUI-${SOAPUI_VERSION}-linux-bin.zip -P /tmp/ # Télécharge le zip
-            
-            echo "Décompression de SoapUI..."
-            unzip /tmp/SoapUI-${SOAPUI_VERSION}-linux-bin.zip -d /opt/ # Décompresse dans /opt
-            mv "/opt/SoapUI-${SOAPUI_VERSION}" "${SOAPUI_INSTALL_DIR}" # Renomme le dossier décompressé
-  
-            echo "Répertoire d'installation SoapUI: ${SOAPUI_INSTALL_DIR}"
-            chmod +x "${SOAPUI_INSTALL_DIR}/bin/testrunner.sh"
-            echo "::set-output name=testrunner_path::${SOAPUI_INSTALL_DIR}/bin/testrunner.sh"
-  
-      - name: Create output directory
-        run: mkdir -p target/soapui_results # Crée le dossier de sortie AVANT d'exécuter les tests.
-  
+          wget https://github.com/hamzanaji123/soapui-ci/releases/download/v2.0/soapUI-light.zip -O soapUI-light.zip
+          unzip soapUI-light.zip -d soapui
+          chmod +x soapui/soapUI-light/bin/testrunner.sh
+
       - name: Run SoapUI Tests
         run: |
-            ${{ steps.install_soapui.outputs.testrunner_path }} \
-              -s "Cas_Credit" \
-              -c "Get Request Run it" \ # N'oublie pas d'exécuter le TestCase spécifique si tu le veux
-              -r \
-              -a \
-              -f "target/soapui_results" \
-              Stage-soapui-project.xml # Assure-toi que ce chemin est correct
+         soapui/soapUI-light/bin/testrunner.sh -s"Cas_Credit" -f"target" Stage-soapui-project.xml
 
            
 
