@@ -22,6 +22,7 @@ jobs:
           java-version: 11
 
       - name: Download and install SoapUI
+        id: install_soapui # Ajout d'un ID pour récupérer le chemin du testrunner
         run: |
           echo "Téléchargement de soapUI-light.zip..."
           wget https://github.com/hamzanaji123/soapui-ci/releases/download/v2.0/soapUI-light.zip -O soapUI-light.zip
@@ -29,53 +30,110 @@ jobs:
           echo "Décompression du ZIP dans le dossier 'soapui'..."
           unzip soapUI-light.zip -d soapui
           
-          echo "Listing du contenu du dossier 'soapui' (1er niveau) :"
-          ls -F soapui/ # Afficher le contenu de soapui/
+          # Assure-toi que le chemin est correct pour la structure de ton ZIP
+          SOAPUI_INSTALL_DIR="soapui/soapUI-light/soapUI-light" # Répertoire racine de SoapUI décompressé
           
-          echo "Listing du contenu du dossier 'soapui/soapUI-light' (2ème niveau) :"
-          ls -F soapui/soapUI-light/ # Afficher le contenu de soapui/soapUI-light/
-          
-          echo "Listing du contenu du dossier 'soapui/soapUI-light/soapUI-light' (3ème niveau) :"
-          ls -F soapui/soapUI-light/soapUI-light/ # Afficher le contenu de soapui/soapUI-light/soapUI-light/
-          
-          echo "Listing du contenu du dossier 'soapui/soapUI-light/soapUI-light/bin' (4ème niveau) :"
-          ls -F soapui/soapUI-light/soapUI-light/bin/ # Afficher le contenu de soapui/soapUI-light/soapUI-light/bin/
-          
-          # Tentative de rendre exécutable et vérification du chemin
-          echo "Tentative de rendre testrunner.sh exécutable et vérification du chemin..."
-          chmod +x soapui/soapUI-light/soapUI-light/bin/testrunner.sh
+          echo "Rendre testrunner.sh exécutable..."
+          chmod +x "${SOAPUI_INSTALL_DIR}/bin/testrunner.sh"
           
           # Vérifier si le fichier existe et est exécutable
-          if [ -f soapui/soapUI-light/soapUI-light/bin/testrunner.sh ]; then
+          if [ -f "${SOAPUI_INSTALL_DIR}/bin/testrunner.sh" ]; then
             echo "testrunner.sh trouvé. Vérification des permissions :"
-            ls -l soapui/soapUI-light/soapUI-light/bin/testrunner.sh
+            ls -l "${SOAPUI_INSTALL_DIR}/bin/testrunner.sh"
+            echo "::set-output name=testrunner_path::$(pwd)/${SOAPUI_INSTALL_DIR}/bin/testrunner.sh"
+            echo "::set-output name=soapui_ext_dir::$(pwd)/${SOAPUI_INSTALL_DIR}/bin/ext"
           else
             echo "ERREUR: testrunner.sh NON TROUVE au chemin attendu après chmod."
             exit 1 # Arrête le workflow si le fichier n'est pas trouvé
           fi
-
+      
+      # NOUVELLE ÉTAPE : Télécharger et installer les JARs POI
+      - name: Download and install Apache POI JARs
+        run: |
+          # Créer le dossier 'ext' s'il n'existe pas
+          mkdir -p ${{ steps.install_soapui.outputs.soapui_ext_dir }}
+          
+          # Versions recommandées pour POI
+          POI_VERSION="5.2.5" # Utilise une version stable récente
+          
+          # Liste des JARs POI essentiels. Adapte cette liste selon tes besoins spécifiques.
+          # Celles-ci sont généralement les minimales pour xlsx.
+          JAR_FILES=(
+            "poi-$POI_VERSION.jar"
+            "poi-ooxml-$POI_VERSION.jar"
+            "poi-ooxml-lite-$POI_VERSION.jar"
+            "poi-ooxml-schemas-$POI_VERSION.jar"
+            "commons-codec-1.16.0.jar" # Dépendance de POI
+            "commons-collections4-4.4.jar" # Dépendance de POI
+            "commons-io-2.15.1.jar" # Dépendance de POI
+            "commons-compress-1.25.0.jar" # Dépendance de POI
+            "xmlbeans-5.2.1.jar" # Dépendance de POI pour ooxml
+            "SparseBitSet-$POI_VERSION.jar" # Dépendance de POI pour ooxml
+            "log4j-api-2.20.0.jar" # Si tu utilises log4j, sinon non nécessaire
+            "log4j-core-2.20.0.jar" # Si tu utilises log4j, sinon non nécessaire
+          )
+          
+          # URL de base pour Maven Central
+          MAVEN_BASE_URL="https://repo1.maven.org/maven2"
+          
+          # Télécharger chaque JAR et le placer dans le dossier 'ext' de SoapUI
+          for jar in "${JAR_FILES[@]}"; do
+            if [[ "$jar" == poi-* ]]; then
+              JAR_PATH="org/apache/poi/${jar%.jar}/${jar}"
+            elif [[ "$jar" == commons-codec-* ]]; then
+              JAR_PATH="commons-codec/${jar%.jar}/${jar}"
+            elif [[ "$jar" == commons-collections4-* ]]; then
+              JAR_PATH="org/apache/commons/commons-collections4/${jar%.jar}/${jar}"
+            elif [[ "$jar" == commons-io-* ]]; then
+              JAR_PATH="commons-io/${jar%.jar}/${jar}"
+            elif [[ "$jar" == commons-compress-* ]]; then
+              JAR_PATH="org/apache/commons/commons-compress/${jar%.jar}/${jar}"
+            elif [[ "$jar" == xmlbeans-* ]]; then
+              JAR_PATH="org/apache/xmlbeans/${jar%.jar}/${jar}"
+            elif [[ "$jar" == log4j-api-* ]]; then
+              JAR_PATH="org/apache/logging/log4j/log4j-api/${jar%.jar}/${jar}"
+            elif [[ "$jar" == log4j-core-* ]]; then
+              JAR_PATH="org/apache/logging/log4j/log4j-core/${jar%.jar}/${jar}"
+            elif [[ "$jar" == SparseBitSet-* ]]; then # Pas dans Maven Central par défaut, souvent inclus avec POI
+              echo "Avertissement: $jar peut nécessiter une source spécifique ou être inclus avec POI."
+              continue # Skip si ce n'est pas trouvé facilement sur Maven
+            else
+              echo "Dépendance $jar non mappée, veuillez ajouter son chemin Maven."
+              continue
+            fi
+            
+            # Construire l'URL complète
+            URL="${MAVEN_BASE_URL}/${JAR_PATH}"
+            echo "Téléchargement de $jar depuis $URL"
+            wget "$URL" -O "${{ steps.install_soapui.outputs.soapui_ext_dir }}/$jar" || echo "Échec du téléchargement de $jar. Vérifiez l'URL ou la version."
+          done
+        env:
+          # Définir l'URL de base de Maven Central
+          MAVEN_BASE_URL: https://repo1.maven.org/maven2
+        
       - name: Create output directory
-        run: mkdir -p target # Crée le dossier 'target' à la racine du dépôt
+        run: mkdir -p target
 
       - name: Run SoapUI Tests
         run: |
-          echo "Exécution des tests SoapUI avec le chemin : soapui/soapUI-light/soapUI-light/bin/testrunner.sh"
-          # Utilisation du chemin que nous avons vérifié et qui devrait être correct
-          soapui/soapUI-light/soapUI-light/bin/testrunner.sh -s"Cas_Credit" -f"target" Stage-soapui-project.xml
+          echo "Exécution des tests SoapUI..."
+          ${{ steps.install_soapui.outputs.testrunner_path }} \
+            -s"Cas_Credit" \
+            -c"Verification_operation_credit" \
+            -r \
+            -a \
+            -f"target" \
+            Stage-soapui-project.xml
         env:
-          # Ajout de ces variables pour aider le débogage de SoapUI
-          # Utile si SoapUI lui-même rencontre des problèmes de chemins ou d'accès
           SOAPUI_HOME: ${{ github.workspace }}/soapui/soapUI-light/soapUI-light
-          SOAPUI_EXT_LIBS: ${{ github.workspace }}/soapui/soapUI-light/soapUI-light/bin/ext
-          JAVA_HOME: /usr/lib/jvm/java-11-temurin # chemin commun sur ubuntu-latest pour temurin 11
-
+          SOAPUI_EXT_LIBS: ${{ steps.install_soapui.outputs.soapui_ext_dir }} # Utiliser le chemin de sortie de l'étape
+          JAVA_HOME: /usr/lib/jvm/java-11-temurin
 
       - name: Upload Groovy Script Error Log
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: groovy-script-error-log
-          # Assure-toi que ce chemin est correct pour tes logs d'erreur Groovy
           path: target/Cas_Credit-Verification_operation_credit-GroovyScript-0-FAILED.txt
 
       - name: Upload Test Results (JUnit Report)
@@ -90,7 +148,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: generated-excel-report
-          # Change ceci si ton fichier Excel a un nom différent
-          path: Testing.xlsx # Si Testing.xlsx est modifié et à la racine du dépôt
-          # Ou si ton script le génère dans target/
-          # path: target/Testing.xlsx
+          path: Testing.xlsx # Assure-toi que c'est le bon chemin si le fichier est généré
