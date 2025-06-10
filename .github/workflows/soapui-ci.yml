@@ -47,7 +47,7 @@ jobs:
             exit 1 # Arrête le workflow si le fichier n'est pas trouvé
           fi
       
-      # NOUVELLE ÉTAPE : Télécharger et installer les JARs POI
+      # NOUVELLE ÉTAPE : Télécharger et installer les JARs 
       - name: Download and install Apache POI JARs
         run: |
           # Créer le dossier 'ext' s'il n'existe pas
